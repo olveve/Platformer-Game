@@ -1,11 +1,12 @@
 import pygame as pg
 from settings import *
-from backgrounds import *
-
 pg.init()
+
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
+
+from backgrounds import *
 
 
 running = True
@@ -17,8 +18,8 @@ while running:
 
     clock.tick(FPS)
 
-    draw_bg()
-
+    draw_bg(screen)
+    
     pg.display.update()
 
 pg.quit()
