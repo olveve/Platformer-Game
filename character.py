@@ -36,7 +36,7 @@ class Samurai:
             # (self.frame_counter + 1) % len(mario_sprites)
             #self.image = mario_sprites[ (self.frame_counter // 3) % len(mario_sprites) ]
         if keys_pressed[pg.K_UP]:
-            if self.vy == 0:
+            if self.y == HEIGHT - (self.height + 67):
                 self.vy = self.jump
         
         # Oppdatere screen_scroll basert på x-posisjonen til spilleren
