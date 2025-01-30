@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from backgrounds import *
 
 pg.init()
 clock = pg.time.Clock()
@@ -9,7 +10,7 @@ pg.display.set_caption("Runner")
 
 running = True
 while running:
-
+    draw_bg()
     
     for event in pg.event.get():
         if event.type == pg.QUIT:
