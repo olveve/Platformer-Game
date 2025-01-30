@@ -1,9 +1,11 @@
 WIDTH = 1059
 HEIGHT = 504
 SIZE = (WIDTH, HEIGHT)
+
 SCROLL_THRESH = 200
-SCREEN_SCROLL = 0
-BG_SCROLL = 0
+screen_scroll = 0
+bg_scroll = 0
+
 FPS = 60
 
 GRAVITY = 1
