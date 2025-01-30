@@ -4,6 +4,7 @@ from settings import *
 pg.init()
 clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
+pg.display.set_caption("Runner")
 
 
 running = True
@@ -15,3 +16,5 @@ while running:
             running = False
 
     clock.tick(FPS)
+
+pg.quit()
