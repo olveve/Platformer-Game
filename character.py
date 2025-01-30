@@ -31,3 +31,4 @@ class Samurai:
             if keys_pressed[pg.K_UP]:
                 if self.dy == 0:
                     self.vy = self.jump
+        
