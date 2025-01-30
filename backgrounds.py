@@ -1,5 +1,6 @@
 import pygame as pg
 from main import screen
+from settings import *
 
 
 gras = pg.image.image.load("assets/Background/Gras.png").convert_alpha()
@@ -19,3 +20,8 @@ sky = pg.image.image.load("assets/Background/Sky.png").convert_alpha()
 def draw_bg():
     # screen.fill(BG)
     screen.blit(sky, (0,0))
+    screen.blit(clouds, (0, HEIGHT - clouds.get_height() - 300))
+    screen.blit(mountain_back, (0, HEIGHT - mountain_back.get_height() - 300))
+    screen.blit(mountain_middle, (0, HEIGHT - mountain_middle.get_height() - 300))
+    
+
