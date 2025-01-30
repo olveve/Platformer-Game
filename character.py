@@ -11,7 +11,7 @@ class Samurai:
         self.jump = -5
 
     def movement(self):
-        self.dy += GRAVITY
+        self.vy += GRAVITY
         self.y += self.vy
 
         if not self.dead and self.y > HEIGHT - self.height:
