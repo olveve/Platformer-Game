@@ -38,7 +38,4 @@ class Samurai:
             if keys_pressed[pg.K_UP]:
                 if self.vy == 0:
                     self.vy = self.jump
-        
-        # Oppdatere screen_scroll basert på x-posisjonen til spilleren
-        # if self.char_type == "samurai":
             
