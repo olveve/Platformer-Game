@@ -10,12 +10,15 @@ pg.display.set_caption("Runner")
 
 running = True
 while running:
-    draw_bg()
     
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
 
     clock.tick(FPS)
+
+    draw_bg()
+
+    pg.display.update()
 
 pg.quit()
