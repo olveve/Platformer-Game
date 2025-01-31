@@ -3,11 +3,11 @@ from settings import *
 from assets import *
 
 class Samurai:
-    def __init__(self, x, y, char_type):
+    def __init__(self, x, y, char_type, vx):
         self.x = x
         self. y = y
         self.char_type = char_type
-        self.vx = 5
+        self.vx = vx
         self.vy = 0
         self.jump = -22
         self.width = 64
@@ -42,8 +42,9 @@ class Samurai:
                     self.vy = self.jump
 
         if self.char_type == "ai":
+            distance_to_person = abs(self.x - person.x)
             self.x -= self.vx
-            if self.x - person.x < 200:
+            if distance_to_person < 50:
                 self.vx = 0
 
         
@@ -51,5 +52,5 @@ class Samurai:
         # if self.char_type == "samurai":
 
 
-person = Samurai(100, 100, "samurai")
-enemy = Samurai(800, 100, "ai")
+person = Samurai(100, 100, "samurai", 10)
+enemy = Samurai(800, 100, "ai", 2)
