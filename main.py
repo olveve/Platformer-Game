@@ -7,9 +7,7 @@ screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
 
 from backgrounds import *
-from character import Samurai
-
-person = Samurai(100, 100)
+from character import *
 
 
 running = True
@@ -24,6 +22,8 @@ while running:
     draw_bg(screen)
     person.movement()
     person.draw(screen)
+    enemy.draw(screen)
+    enemy.movement()
     
     pg.display.update()
 
