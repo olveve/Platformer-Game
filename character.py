@@ -13,6 +13,7 @@ class Samurai:
         self.width = 64
         self.height = 64
         self.color = (255, 0, 0)
+        self.following = False
 
     def draw(self, screen):
         pg.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
@@ -43,10 +44,13 @@ class Samurai:
 
         if self.char_type == "ai":
             distance_to_person = abs(self.x - person.x)
-            self.x -= self.vx
-            if distance_to_person < 50:
-                self.vx = 0
-
+            if distance_to_person <= 100:
+                self.following = True
+            if self.following:
+                if self.x < person.x:
+                    self.x += self.vx
+                if self.x > person.x:
+                    self.x -= self.vx
         
         # Oppdatere screen_scroll basert på x-posisjonen til spilleren
         # if self.char_type == "samurai":
