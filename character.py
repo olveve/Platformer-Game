@@ -43,17 +43,18 @@ class Samurai(Character):
 
     def movement(self):
         super().movement()
+
         keys_pressed = pg.key.get_pressed()
+        if keys_pressed[pg.K_UP]:
+            if self.y == HEIGHT - (self.height + 67):
+                self.vy = self.jump
+        """""
         if keys_pressed[pg.K_LEFT] and self.x > 0:
             self.x -= self.vx
             
         if keys_pressed[pg.K_RIGHT] and self.x < WIDTH - self.width:
             self.x += self.vx
-            
-        if keys_pressed[pg.K_UP]:
-            if self.y == HEIGHT - (self.height + 67):
-                self.vy = self.jump
-
+        """
 
 
 
@@ -65,7 +66,7 @@ class Enemy(Character):
     def movement(self):
         super().movement()
         distance_to_person = abs(self.x - person.x)
-        if distance_to_person <= 100:
+        if distance_to_person <= 300:
             self.following = True
         if self.following:
             if self.x < person.x:
@@ -74,5 +75,5 @@ class Enemy(Character):
                 self.x -= self.vx
 
 
-person = Samurai(100, 100, 5)
+person = Samurai(100, 100, 7)
 enemy = Enemy(800, 100, 2)
