@@ -63,16 +63,17 @@ class Enemy(Character):
         super().__init__(x, y, vx)
         # TODO: Set self.image to the image of the enemy
 
-    def movement(self):
-        super().movement()
-        distance_to_person = abs(self.x - person.x)
-        if distance_to_person <= 300:
-            self.following = True
-        if self.following:
-            if self.x < person.x:
-                self.x += self.vx
-            if self.x > person.x:
-                self.x -= self.vx
+    def movement(self, is_scrolling, scroll):
+        if not is_scrolling:
+            super().movement()
+            distance_to_person = abs(self.x - person.x)
+            if distance_to_person <= 300:
+                self.following = True
+            if self.following:
+                if self.x < person.x:
+                    self.x += self.vx
+                if self.x > person.x:
+                    self.x -= self.vx
 
 
 person = Samurai(100, 100, 7)
