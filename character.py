@@ -74,5 +74,5 @@ class Enemy(Character):
                 self.x -= self.vx
 
 
-person = Samurai(100, 100, 10)
+person = Samurai(100, 100, 5)
 enemy = Enemy(800, 100, 2)

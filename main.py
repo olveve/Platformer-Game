@@ -10,6 +10,7 @@ from backgrounds import *
 from character import *
 
 scroll = 0
+scroll_threshold = 400
 
 running = True
 while running:
@@ -20,8 +21,18 @@ while running:
 
     clock.tick(FPS)
 
-    scroll -= person.vx if pg.key.get_pressed()[pg.K_RIGHT] else 0
-    scroll += person.vx if pg.key.get_pressed()[pg.K_LEFT] else 0
+    keys = pg.key.get_pressed()
+    if keys[pg.K_RIGHT]:
+        if person.x > WIDTH - scroll_threshold:
+            scroll -= person.vx
+        else:
+            person.x += person.vx
+
+    if keys[pg.K_LEFT]:
+        if person.x < scroll_threshold:
+            scroll += person.vx
+        else:
+            person.x -= person.vx
 
 
     draw_bg(screen, scroll)
