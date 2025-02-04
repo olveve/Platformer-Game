@@ -24,16 +24,16 @@ sky = pg.transform.scale(sky, (1059, 504))
 
 
 
-def draw_bg(screen):
+def draw_bg(screen, scroll):
     # screen.fill(BG)
     screen.blit(sky, (0,0))
-    screen.blit(clouds, (0, HEIGHT - clouds.get_height() - 150))
-    screen.blit(mountain_back, (0, HEIGHT - mountain_back.get_height()))
-    screen.blit(mountain_middle, (0, HEIGHT - mountain_middle.get_height()))
-    screen.blit(mountain_front, (0, HEIGHT - mountain_front.get_height()))
-    screen.blit(backgroundtrees, (0, HEIGHT - backgroundtrees.get_height()))
-    screen.blit(trees, (0, HEIGHT - trees.get_height()))
-    screen.blit(ground, (0, HEIGHT - ground.get_height()))
-    screen.blit(gras, (0, HEIGHT - gras.get_height()))
+    screen.blit(clouds, (scroll * 0.1, HEIGHT - clouds.get_height() - 150))
+    screen.blit(mountain_back, (scroll * 0.2, HEIGHT - mountain_back.get_height()))
+    screen.blit(mountain_middle, (scroll * 0.4, HEIGHT - mountain_middle.get_height()))
+    screen.blit(mountain_front, (scroll * 0.6, HEIGHT - mountain_front.get_height()))
+    screen.blit(backgroundtrees, (scroll * 0.8, HEIGHT - backgroundtrees.get_height()))
+    screen.blit(trees, (scroll * 0.9, HEIGHT - trees.get_height()))
+    screen.blit(ground, (scroll, HEIGHT - ground.get_height()))
+    screen.blit(gras, (scroll * 1.1, HEIGHT - gras.get_height()))
 
 

@@ -9,6 +9,7 @@ pg.display.set_caption("Runner")
 from backgrounds import *
 from character import *
 
+scroll = 0
 
 running = True
 while running:
@@ -19,7 +20,11 @@ while running:
 
     clock.tick(FPS)
 
-    draw_bg(screen)
+    scroll -= person.vx if pg.key.get_pressed()[pg.K_RIGHT] else 0
+    scroll += person.vx if pg.key.get_pressed()[pg.K_LEFT] else 0
+
+
+    draw_bg(screen, scroll)
     person.movement()
     person.draw(screen)
     enemy.draw(screen)
