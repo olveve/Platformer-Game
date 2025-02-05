@@ -1,5 +1,5 @@
-# Platformer-Game
-Platform game (spritesheet/parallax)
+# Samurai fighting
+Samurai fighting (spritesheet/parallax)
 
 
 
