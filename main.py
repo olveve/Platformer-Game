@@ -45,14 +45,10 @@ while running:
             person.x -= person.vx
 
     # Ensure the player doesn't move beyond the world boundaries
-    if scroll <= 0:
-        scroll = 0
-        bg_scroll = 0
-        person.x = max(person.x, scroll_threshold)
-    if scroll >= world_length - WIDTH:
-        scroll = world_length - WIDTH
-        bg_scroll = world_length - WIDTH
-        person.x = min(person.x, WIDTH - scroll_threshold)
+    if person.x < 0:
+        person.x = 0
+    if person.x > world_length - person.width:
+        person.x = world_length - person.width
 
     draw_bg(screen, bg_scroll)
     person.movement()
