@@ -71,8 +71,8 @@ class Enemy(Character):
                 if self.x > self.target.x:
                     self.x -= self.vx
 
-        if scrolling and distance_to_person <= WIDTH:
-            pass
+        #elif scrolling and distance_to_person <= WIDTH:
+         #   self.vx = 0
         else:
             self.x += scroll  # Adjust enemy position based on scroll
 
