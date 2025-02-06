@@ -53,7 +53,7 @@ class Enemy(Character):
         self.world_length = world_length
         # TODO: Set self.image to the image of the enemy
 
-    def movement(self, is_scrolling, scroll):
+    def movement(self, scrolling, scroll):
         self.vy += GRAVITY
         self.y += self.vy
 
@@ -61,7 +61,7 @@ class Enemy(Character):
             self.y = HEIGHT - (self.height + 67)
             self.vy = 0
 
-        if not is_scrolling:
+        if not scrolling:
             distance_to_person = abs(self.x - self.target.x)
             if distance_to_person <= 300:
                 self.following = True

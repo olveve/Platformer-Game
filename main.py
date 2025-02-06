@@ -9,7 +9,7 @@ pg.display.set_caption("Runner")
 from backgrounds import draw_bg
 from character import create_characters
 
-world_length = 5 * 1059  # 5 background images width
+world_length = 5 * WIDTH  # 5 background images width
 person, enemy = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
@@ -25,13 +25,13 @@ while running:
     clock.tick(FPS)
 
     keys = pg.key.get_pressed()
-    is_scrolling = False
+    scrolling = ""
     if keys[pg.K_RIGHT]:
         if person.x > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll += person.vx
             bg_scroll += person.vx
             person.x = WIDTH - scroll_threshold  # Keep the player at the scroll threshold
-            is_scrolling = True
+            scrolling = "R"
         else:
             person.x += person.vx
 
@@ -40,7 +40,7 @@ while running:
             scroll -= person.vx
             bg_scroll -= person.vx
             person.x = scroll_threshold  # Keep the player at the scroll threshold
-            is_scrolling = True
+            scrolling = "L"
         else:
             person.x -= person.vx
 
@@ -53,7 +53,14 @@ while running:
     draw_bg(screen, bg_scroll)
     person.movement()
     person.draw(screen)
-    enemy.movement(is_scrolling, -person.vx if not is_scrolling else -person.vx * 0.1) 
+
+    speed = -person.vx
+    if scrolling == "R":
+        speed = -person.vx * (2/7)
+    if scrolling == "L":
+        speed = person.vx * (2/7)
+
+    enemy.movement(scrolling,speed) 
     enemy.draw(screen)
     
     pg.display.update()
