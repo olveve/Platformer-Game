@@ -30,7 +30,7 @@ while running:
         if person.x > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll += person.vx
             bg_scroll += person.vx
-            person.x = WIDTH - scroll_threshold  # Keep the player at the scroll threshold
+            person.x = WIDTH - scroll_threshold 
             scrolling = "R"
         else:
             person.x += person.vx
@@ -39,7 +39,7 @@ while running:
         if person.x < scroll_threshold and scroll > 0:
             scroll -= person.vx
             bg_scroll -= person.vx
-            person.x = scroll_threshold  # Keep the player at the scroll threshold
+            person.x = scroll_threshold 
             scrolling = "L"
         else:
             person.x -= person.vx
