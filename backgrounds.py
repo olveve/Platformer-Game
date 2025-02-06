@@ -31,7 +31,7 @@ fuji = pg.transform.scale(fuji, (1059, 504))
 
 
 
-def draw_bg(screen, scroll, world_length):
+def draw_bg(screen, scroll):
     width = sky.get_width()
     for x in range(5):  # Adjust the range to ensure seamless scrolling
         screen.blit(sky, ((x * width) - scroll * 0.1, 0))

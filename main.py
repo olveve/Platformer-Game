@@ -59,7 +59,7 @@ while running:
     if person.x > world_length - person.width:
         person.x = world_length - person.width
 
-    draw_bg(screen, bg_scroll, world_length)
+    draw_bg(screen, bg_scroll)
     person.movement()
     person.draw(screen)
 
