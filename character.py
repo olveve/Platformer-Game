@@ -56,13 +56,13 @@ class Enemy(Character):
     def movement(self, scrolling, scroll):
         self.vy += GRAVITY
         self.y += self.vy
+        distance_to_person = abs(self.x - self.target.x)
 
         if self.y > HEIGHT - (self.height + 67):
             self.y = HEIGHT - (self.height + 67)
             self.vy = 0
 
         if not scrolling:
-            distance_to_person = abs(self.x - self.target.x)
             if distance_to_person <= 300:
                 self.following = True
             if self.following:
@@ -70,6 +70,9 @@ class Enemy(Character):
                     self.x += self.vx
                 if self.x > self.target.x:
                     self.x -= self.vx
+
+        if scrolling and distance_to_person <= WIDTH:
+            pass
         else:
             self.x += scroll  # Adjust enemy position based on scroll
 
@@ -84,5 +87,8 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Samurai(100, 100, 7)
-    enemy = Enemy(800, 100, 2, person, world_length)
-    return person, enemy
+    enemies = []
+    for i in range(5):
+        enemy = Enemy(500 * i + 800, 100, 2, person, world_length)
+        enemies.append(enemy)
+    return person, enemies

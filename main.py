@@ -10,7 +10,7 @@ from backgrounds import draw_bg
 from character import create_characters
 
 world_length = 5 * WIDTH  # 5 background images width
-person, enemy = create_characters(world_length)
+person, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 300
@@ -60,8 +60,9 @@ while running:
     if scrolling == "L":
         speed = person.vx * (2/7)
 
-    enemy.movement(scrolling,speed) 
-    enemy.draw(screen)
+    for enemy in enemies:
+        enemy.movement(scrolling,speed) 
+        enemy.draw(screen)
     
     pg.display.update()
 
