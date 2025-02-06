@@ -13,7 +13,7 @@ world_length = 5 * WIDTH  # 5 background images width
 person, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
-scroll_threshold = 300
+scroll_threshold = 200
 
 running = True
 while running:
@@ -30,7 +30,7 @@ while running:
         if person.x > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll += person.vx
             bg_scroll += person.vx
-            person.x = WIDTH - scroll_threshold  # Keep the player at the scroll threshold
+            person.x = WIDTH - scroll_threshold 
             scrolling = "R"
         else:
             person.x += person.vx
@@ -39,7 +39,7 @@ while running:
         if person.x < scroll_threshold and scroll > 0:
             scroll -= person.vx
             bg_scroll -= person.vx
-            person.x = scroll_threshold  # Keep the player at the scroll threshold
+            person.x = scroll_threshold 
             scrolling = "L"
         else:
             person.x -= person.vx
