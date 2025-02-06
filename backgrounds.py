@@ -12,6 +12,10 @@ mountain_back = pg.image.load("assets/Background/Mountain_Back.png").convert_alp
 clouds = pg.image.load("assets/Background/Clouds.png").convert_alpha()
 sky = pg.image.load("assets/Background/Sky.png").convert_alpha()
 
+house = pg.image.load("assets/Background/House.png").convert_alpha()
+fuji = pg.image.load("assets/Background/Fuji.png").convert_alpha()
+
+
 gras = pg.transform.scale(gras, (1059, 504))
 ground = pg.transform.scale(ground, (1059, 504))
 trees = pg.transform.scale(trees, (1059, 504))
@@ -22,18 +26,25 @@ mountain_back = pg.transform.scale(mountain_back, (1059, 504))
 clouds = pg.transform.scale(clouds, (1059, 504))
 sky = pg.transform.scale(sky, (1059, 504))
 
+house = pg.transform.scale(house, (1059, 504))
+fuji = pg.transform.scale(fuji, (1059, 504))
 
 
-def draw_bg(screen):
-    # screen.fill(BG)
-    screen.blit(sky, (0,0))
-    screen.blit(clouds, (0, HEIGHT - clouds.get_height() - 150))
-    screen.blit(mountain_back, (0, HEIGHT - mountain_back.get_height()))
-    screen.blit(mountain_middle, (0, HEIGHT - mountain_middle.get_height()))
-    screen.blit(mountain_front, (0, HEIGHT - mountain_front.get_height()))
-    screen.blit(backgroundtrees, (0, HEIGHT - backgroundtrees.get_height()))
-    screen.blit(trees, (0, HEIGHT - trees.get_height()))
-    screen.blit(ground, (0, HEIGHT - ground.get_height()))
-    screen.blit(gras, (0, HEIGHT - gras.get_height()))
 
+def draw_bg(screen, scroll):
+    width = sky.get_width()
+    for x in range(5):  # Adjust the range to ensure seamless scrolling
+        screen.blit(sky, ((x * width) - scroll * 0.1, 0))
+        screen.blit(clouds, ((x * width) - scroll * 0.2, HEIGHT - clouds.get_height() - 150))
+        screen.blit(mountain_back, ((x * width) - scroll * 0.3, HEIGHT - mountain_back.get_height()))
+        screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
+        screen.blit(mountain_front, ((x * width) - scroll * 0.5, HEIGHT - mountain_front.get_height()))
+        screen.blit(backgroundtrees, ((x * width) - scroll * 0.6, HEIGHT - backgroundtrees.get_height()))
+        screen.blit(trees, ((x * width) - scroll * 0.7, HEIGHT - trees.get_height()))
+        screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
+        screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
 
+  #  if scroll <= 0:
+  #      screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))
+  #  if scroll >= world_length - WIDTH:
+  #      screen.blit(house, (world_length - WIDTH + 400, HEIGHT - house.get_height() - 50)) 
