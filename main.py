@@ -25,14 +25,14 @@ while running:
     is_scrolling = False
     if keys[pg.K_RIGHT]:
         if person.x > WIDTH - scroll_threshold:
-            scroll -= person.vx
+            scroll += person.vx
             is_scrolling = True
         else:
             person.x += person.vx
 
     if keys[pg.K_LEFT]:
         if person.x < scroll_threshold:
-            scroll += person.vx
+            scroll -= person.vx
             is_scrolling = True
         else:
             person.x -= person.vx

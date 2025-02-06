@@ -25,15 +25,16 @@ sky = pg.transform.scale(sky, (1059, 504))
 
 
 def draw_bg(screen, scroll):
-    # screen.fill(BG)
-    screen.blit(sky, (0,0))
-    screen.blit(clouds, (scroll * 0.1, HEIGHT - clouds.get_height() - 150))
-    screen.blit(mountain_back, (scroll * 0.2, HEIGHT - mountain_back.get_height()))
-    screen.blit(mountain_middle, (scroll * 0.4, HEIGHT - mountain_middle.get_height()))
-    screen.blit(mountain_front, (scroll * 0.6, HEIGHT - mountain_front.get_height()))
-    screen.blit(backgroundtrees, (scroll * 0.8, HEIGHT - backgroundtrees.get_height()))
-    screen.blit(trees, (scroll * 0.9, HEIGHT - trees.get_height()))
-    screen.blit(ground, (scroll, HEIGHT - ground.get_height()))
-    screen.blit(gras, (scroll * 1.1, HEIGHT - gras.get_height()))
+    width = sky.get_width()
+    for x in range(-1, 6):
+        screen.blit(sky, ((x * width) - scroll * 0.2, 0))
+        screen.blit(clouds, ((x * width) - scroll * 0.1, HEIGHT - clouds.get_height() - 100))
+        screen.blit(mountain_back, ((x * width) - scroll * 0.2, HEIGHT - mountain_back.get_height()))
+        screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
+        screen.blit(mountain_front, ((x * width) - scroll * 0.6, HEIGHT - mountain_front.get_height()))
+        screen.blit(backgroundtrees, ((x * width) - scroll * 0.8, HEIGHT - backgroundtrees.get_height()))
+        screen.blit(trees, ((x * width) - scroll * 0.9, HEIGHT - trees.get_height()))
+        screen.blit(ground, ((x * width) - scroll, HEIGHT - ground.get_height()))
+        screen.blit(gras, ((x * width) - scroll * 1.1, HEIGHT - gras.get_height()))
 
 
