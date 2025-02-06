@@ -9,11 +9,14 @@ pg.display.set_caption("Runner")
 from backgrounds import draw_bg
 from character import create_characters
 
-world_length = 5 * WIDTH  # 5 background images width
+world_length = 5 * WIDTH
 person, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
+
+# Reell posisjon i verden
+person.world_x = person.x  
 
 running = True
 while running:
@@ -23,28 +26,34 @@ while running:
             running = False
 
     clock.tick(FPS)
-
     keys = pg.key.get_pressed()
-    scrolling = ""
+    scrolling = ""  # for scroll retningen
+
     if keys[pg.K_RIGHT]:
-        if person.x > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
-            scroll += person.vx
-            bg_scroll += person.vx
-            person.x = WIDTH - scroll_threshold 
-            scrolling = "R"
+        if person.world_x + person.vx <= world_length - person.width:
+            person.world_x += person.vx
         else:
-            person.x += person.vx
+            person.world_x = world_length - person.width
+
+        if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
+            scroll = person.world_x - (WIDTH - scroll_threshold)
+            bg_scroll = scroll
+            scrolling = "R"
 
     if keys[pg.K_LEFT]:
-        if person.x < scroll_threshold and scroll > 0:
-            scroll -= person.vx
-            bg_scroll -= person.vx
-            person.x = scroll_threshold 
-            scrolling = "L"
+        if person.world_x - person.vx >= 0:
+            person.world_x -= person.vx
         else:
-            person.x -= person.vx
+            person.world_x = 0
 
-    # Ensure the player doesn't move beyond the world boundaries
+        if person.world_x - scroll < scroll_threshold and scroll > 0:
+            scroll = person.world_x - scroll_threshold
+            bg_scroll = scroll
+            scrolling = "L"
+
+    person.x = person.world_x - scroll
+
+    # KAN MULIG FJERNES: siden vi har world.x nå
     if person.x < 0:
         person.x = 0
     if person.x > world_length - person.width:
@@ -54,14 +63,19 @@ while running:
     person.movement()
     person.draw(screen)
 
+    if enemies:
+        enemy_factor = enemies[0].vx / person.vx
+    else:
+        enemy_factor = 1
+
     speed = -person.vx
     if scrolling == "R":
-        speed = -person.vx * (enemy.vx/person.vx)
-    if scrolling == "L":
-        speed = person.vx * (enemy.vx/person.vx)
+        speed = -person.vx * enemy_factor
+    elif scrolling == "L":
+        speed = person.vx * enemy_factor
 
     for enemy in enemies:
-        enemy.movement(scrolling,speed) 
+        enemy.movement(scrolling, speed)
         enemy.draw(screen)
     
     pg.display.update()
