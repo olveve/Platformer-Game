@@ -57,7 +57,7 @@ while running:
     draw_bg(screen, bg_scroll)
     person.movement()
     person.draw(screen)
-    enemy.movement(is_scrolling, -scroll if is_scrolling else 0)
+    enemy.movement(is_scrolling, -person.vx if not is_scrolling else 0)
     enemy.draw(screen)
     
     pg.display.update()
