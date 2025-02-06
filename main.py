@@ -13,7 +13,7 @@ world_length = 5 * WIDTH  # 5 background images width
 person, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
-scroll_threshold = 300
+scroll_threshold = 200
 
 running = True
 while running:
