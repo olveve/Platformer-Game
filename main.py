@@ -56,9 +56,9 @@ while running:
 
     speed = -person.vx
     if scrolling == "R":
-        speed = -person.vx * (2/7)
+        speed = -person.vx * (enemy.vx/person.vx)
     if scrolling == "L":
-        speed = person.vx * (2/7)
+        speed = person.vx * (enemy.vx/person.vx)
 
     for enemy in enemies:
         enemy.movement(scrolling,speed) 
