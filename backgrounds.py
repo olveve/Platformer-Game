@@ -27,7 +27,7 @@ clouds = pg.transform.scale(clouds, (1059, 504))
 sky = pg.transform.scale(sky, (1059, 504))
 
 house = pg.transform.scale(house, (1059, 504))
-fuji = pg.transform.scale(fuji, (1059, 504))
+fuji = pg.transform.scale(fuji, (1059, 700))
 
 
 
@@ -49,12 +49,12 @@ def draw_fg(screen, scroll):
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
         
 def draw_fuji(screen, scroll, world_length):
-    start_x = -100  # Juster for startposisjon
+    start_x = -350  # Juster for startposisjon
     end_x = world_length - WIDTH + 300  # Juster for sluttposisjon
-    fuji_y = HEIGHT - fuji.get_height() - 25  # Plassering i høyden
+    fuji_y = HEIGHT - fuji.get_height() + 25  # Plassering i høyden
 
     # Gi Fuji en liten bakgrunnshastighet (lignende bakgrunnselementene)
-    fuji_scroll_factor = 0.82  # Juster dette for å balansere bevegelsen
+    fuji_scroll_factor = 0.62  # Juster dette for å balansere bevegelsen
     adjusted_scroll = scroll * fuji_scroll_factor
 
     if scroll < WIDTH:  # Startområdet
