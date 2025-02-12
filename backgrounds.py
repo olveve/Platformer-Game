@@ -1,6 +1,5 @@
 import pygame as pg
 from settings import *
-from main import world_length
 
 
 gras = pg.image.load("assets/Background/Gras.png").convert_alpha()
@@ -32,34 +31,37 @@ fuji = pg.transform.scale(fuji, (1059, 504))
 
 
 
-def draw_bg(screen, scroll):
+def draw_bg_base(screen, scroll):
     width = sky.get_width()
-    
-    # Tegn de øvre lagene (parallax-bevegelse)
     for x in range(5):
         screen.blit(sky, ((x * width) - scroll * 0.1, 0))
         screen.blit(clouds, ((x * width) - scroll * 0.2, HEIGHT - clouds.get_height() - 150))
         screen.blit(mountain_back, ((x * width) - scroll * 0.3, HEIGHT - mountain_back.get_height()))
         screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
         screen.blit(mountain_front, ((x * width) - scroll * 0.5, HEIGHT - mountain_front.get_height()))
-    
-    draw_fuji(screen, bg_scroll, world_length)  # Bruk scroll, ikke world_x!
 
-    # Nedre lag med parallax-effekt (disse lagene kommer foran Fuji)
+def draw_fg(screen, scroll):
+    width = gras.get_width()
     for x in range(5):
         screen.blit(backgroundtrees, ((x * width) - scroll * 0.6, HEIGHT - backgroundtrees.get_height()))
         screen.blit(trees, ((x * width) - scroll * 0.7, HEIGHT - trees.get_height()))
         screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
-
+        
 def draw_fuji(screen, scroll, world_length):
-    start_x = 50  # Fuji i starten av verden
-    end_x = world_length - WIDTH + 50  # Fuji i slutten av verden
+    start_x = -100  # Juster for startposisjon
+    end_x = world_length - WIDTH + 300  # Juster for sluttposisjon
+    fuji_y = HEIGHT - fuji.get_height() - 25  # Plassering i høyden
+
+    # Gi Fuji en liten bakgrunnshastighet (lignende bakgrunnselementene)
+    fuji_scroll_factor = 0.82  # Juster dette for å balansere bevegelsen
+    adjusted_scroll = scroll * fuji_scroll_factor
 
     if scroll < WIDTH:  # Startområdet
-        screen.blit(fuji, (start_x - scroll, HEIGHT - fuji.get_height() - 50))
+        screen.blit(fuji, (start_x - adjusted_scroll, fuji_y))
     elif scroll > world_length - WIDTH - WIDTH:  # Sluttområdet
-        screen.blit(fuji, (end_x - scroll, HEIGHT - fuji.get_height() - 50))
+        screen.blit(fuji, (end_x - adjusted_scroll, fuji_y))
+
 """
 def draw_fuji(screen, scroll, world_length):
     if scroll < WIDTH:  # Startområdet
