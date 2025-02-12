@@ -60,7 +60,6 @@ while running:
         person.x = world_length - person.width
 
     draw_bg(screen, bg_scroll)
-    draw_fuji(screen, person.world_x, world_length)  # Tegn Fuji stasjonært
     person.movement()
     person.draw(screen)
 

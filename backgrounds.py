@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from main import world_length
 
 
 gras = pg.image.load("assets/Background/Gras.png").convert_alpha()
@@ -41,7 +42,9 @@ def draw_bg(screen, scroll):
         screen.blit(mountain_back, ((x * width) - scroll * 0.3, HEIGHT - mountain_back.get_height()))
         screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
         screen.blit(mountain_front, ((x * width) - scroll * 0.5, HEIGHT - mountain_front.get_height()))
-   
+    
+    draw_fuji(screen, bg_scroll, world_length)  # Bruk scroll, ikke world_x!
+
     # Nedre lag med parallax-effekt (disse lagene kommer foran Fuji)
     for x in range(5):
         screen.blit(backgroundtrees, ((x * width) - scroll * 0.6, HEIGHT - backgroundtrees.get_height()))
@@ -49,8 +52,18 @@ def draw_bg(screen, scroll):
         screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
 
-def draw_fuji(screen, player_x, world_length):
-    """Tegner Fuji helt fast på skjermen hvis spilleren er i start/slutt av verden"""
-    width = 1059  # Bakgrunnsbredden
-    if player_x < width or player_x > world_length - width:
-        screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))  # Helt fast på skjermen
+def draw_fuji(screen, scroll, world_length):
+    start_x = 50  # Fuji i starten av verden
+    end_x = world_length - WIDTH + 50  # Fuji i slutten av verden
+
+    if scroll < WIDTH:  # Startområdet
+        screen.blit(fuji, (start_x - scroll, HEIGHT - fuji.get_height() - 50))
+    elif scroll > world_length - WIDTH - WIDTH:  # Sluttområdet
+        screen.blit(fuji, (end_x - scroll, HEIGHT - fuji.get_height() - 50))
+"""
+def draw_fuji(screen, scroll, world_length):
+    if scroll < WIDTH:  # Startområdet
+        screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))
+    elif scroll > world_length - WIDTH * 2:  # Sluttområdet
+        screen.blit(fuji, (world_length - WIDTH + 50 - scroll, HEIGHT - fuji.get_height() - 50))
+"""
