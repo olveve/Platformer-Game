@@ -59,9 +59,10 @@ class Character:
                 self.x += self.vx
                 self.running = True
             if keys_pressed[pg.K_UP]:
+                self.jumping = True
                 if self.y == HEIGHT - (self.rect.height + 67):
                     self.vy = -22
-                    self.jumping = True
+                    self.jumping = False
 
         # Oppdatere rektangelet basert på spillerens posisjon
         self.rect.topleft = (self.x, self.y)
