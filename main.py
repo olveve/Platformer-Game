@@ -9,8 +9,10 @@ pg.display.set_caption("Runner")
 from backgrounds import draw_bg
 from character import create_characters
 
+
 world_length = 5 * WIDTH
-person, enemies = create_characters(world_length)
+#person, enemies = create_characters(world_length)
+person = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -30,10 +32,10 @@ while running:
     scrolling = ""  # for scroll retningen
 
     if keys[pg.K_RIGHT]:
-        if person.world_x + person.vx <= world_length - person.width:
+        if person.world_x + person.vx <= world_length - person.rect.width:
             person.world_x += person.vx
         else:
-            person.world_x = world_length - person.width
+            person.world_x = world_length - person.rect.width
 
         if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll = person.world_x - (WIDTH - scroll_threshold)
@@ -56,13 +58,15 @@ while running:
     # KAN MULIG FJERNES: siden vi har world.x nå
     if person.x < 0:
         person.x = 0
-    if person.x > world_length - person.width:
-        person.x = world_length - person.width
+    if person.x > world_length - person.rect.width:
+        person.x = world_length - person.rect.width
 
     draw_bg(screen, bg_scroll)
-    person.movement()
+    person.update()
+    person.movement(scroll, scrolling)
     person.draw(screen)
 
+    """""
     if enemies:
         enemy_factor = enemies[0].vx / person.vx
     else:
@@ -77,6 +81,7 @@ while running:
     for enemy in enemies:
         enemy.movement(scrolling, speed)
         enemy.draw(screen)
+        """
     
     pg.display.update()
 
