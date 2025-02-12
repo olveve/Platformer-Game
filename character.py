@@ -31,7 +31,6 @@ class Character:
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
         animation_list = []
-        
         for y, animation in enumerate(animation_steps): # for loop for y-aksen  enumerate er som en tracker som sier hvor mange ganger vi har gått gjennom loopen. samme som y=0 også y+=1
             temp_img_list = []
             for x in range(animation): # for loop for x-aksen
