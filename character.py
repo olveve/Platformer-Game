@@ -28,15 +28,10 @@ class Character:
         self.health = 100
         self.char_type = char_type
 
-    def draw(self, screen):
-        pg.draw.rect(screen, (255, 0, 0), self.rect)
-        screen.blit(self.image, (self.rect.x - (self.offset[0] * self.image_scale), self.rect.y - (self.offset[1] * self.image_scale)))
-        # TODO: Draw the image of the character using blit
-        # screen.blit(self.image, (self.x, self.y))
-
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
         animation_list = []
+        
         for y, animation in enumerate(animation_steps): # for loop for y-aksen  enumerate er som en tracker som sier hvor mange ganger vi har gått gjennom loopen. samme som y=0 også y+=1
             temp_img_list = []
             for x in range(animation): # for loop for x-aksen
@@ -154,6 +149,11 @@ class Character:
         if attacking_rect.colliderect(target.rect):
             target.health -= 10
             target.hit = True
+
+    def draw(self, screen):
+        pg.draw.rect(screen, (255, 0, 0), self.rect)
+        screen.blit(self.image, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
+
             
 """""
 class Samurai(Character):
