@@ -21,7 +21,7 @@ class Character:
         self.jumping = False
         self.attacking = False
         self.following = False
-        self.rect = pg.Rect(self.x, self.y, self.size * self.image_scale, self.size * self.image_scale)
+        self.rect = pg.Rect(self.x, self.y, self.size[0] * self.image_scale, self.size[1] * self.image_scale)
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
@@ -40,8 +40,8 @@ class Character:
         for y, animation in enumerate(animation_steps): # for loop for y-aksen  enumerate er som en tracker som sier hvor mange ganger vi har gått gjennom loopen. samme som y=0 også y+=1
             temp_img_list = []
             for x in range(animation): # for loop for x-aksen
-                temp_img = sprite_sheet.subsurface(x * self.size, y * self.size, self.size, self.size)
-                temp_img_list.append(pg.transform.scale(temp_img, (self.size * self.image_scale, self.size * self.image_scale))) # en rad med bilder i liste
+                temp_img = sprite_sheet.subsurface(x * self.size[0], y * self.size[1], self.size[0], self.size[1])
+                temp_img_list.append(pg.transform.scale(temp_img, (self.size[0] * self.image_scale, self.size[1] * self.image_scale))) # en rad med bilder i liste
             animation_list.append(temp_img_list) # alle bilder i en liste, delt opp i flere lister
         return animation_list
 
