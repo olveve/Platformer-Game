@@ -33,18 +33,24 @@ fuji = pg.transform.scale(fuji, (1059, 504))
 
 def draw_bg(screen, scroll):
     width = sky.get_width()
-    for x in range(5):  # Adjust the range to ensure seamless scrolling
+    
+    # Tegn de øvre lagene (parallax-bevegelse)
+    for x in range(5):
         screen.blit(sky, ((x * width) - scroll * 0.1, 0))
         screen.blit(clouds, ((x * width) - scroll * 0.2, HEIGHT - clouds.get_height() - 150))
         screen.blit(mountain_back, ((x * width) - scroll * 0.3, HEIGHT - mountain_back.get_height()))
         screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
         screen.blit(mountain_front, ((x * width) - scroll * 0.5, HEIGHT - mountain_front.get_height()))
+   
+    # Nedre lag med parallax-effekt (disse lagene kommer foran Fuji)
+    for x in range(5):
         screen.blit(backgroundtrees, ((x * width) - scroll * 0.6, HEIGHT - backgroundtrees.get_height()))
         screen.blit(trees, ((x * width) - scroll * 0.7, HEIGHT - trees.get_height()))
         screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
 
-  #  if scroll <= 0:
-  #      screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))
-  #  if scroll >= world_length - WIDTH:
-  #      screen.blit(house, (world_length - WIDTH + 400, HEIGHT - house.get_height() - 50)) 
+def draw_fuji(screen, player_x, world_length):
+    """Tegner Fuji helt fast på skjermen hvis spilleren er i start/slutt av verden"""
+    width = 1059  # Bakgrunnsbredden
+    if player_x < width or player_x > world_length - width:
+        screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))  # Helt fast på skjermen

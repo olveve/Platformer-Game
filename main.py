@@ -6,7 +6,7 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
 
-from backgrounds import draw_bg
+from backgrounds import draw_bg, draw_fuji
 from character import create_characters
 
 world_length = 5 * WIDTH
@@ -60,6 +60,7 @@ while running:
         person.x = world_length - person.width
 
     draw_bg(screen, bg_scroll)
+    draw_fuji(screen, person.world_x, world_length)  # Tegn Fuji stasjonært
     person.movement()
     person.draw(screen)
 
