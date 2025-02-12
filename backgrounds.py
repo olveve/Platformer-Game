@@ -48,19 +48,16 @@ def draw_fg(screen, scroll):
         screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
         
-def draw_fuji(screen, scroll, world_length):
+def draw_fuji(screen, scroll):
     start_x = -350  # Juster for startposisjon
-    end_x = world_length - WIDTH + 300  # Juster for sluttposisjon
     fuji_y = HEIGHT - fuji.get_height() + 25  # Plassering i høyden
 
     # Gi Fuji en liten bakgrunnshastighet (lignende bakgrunnselementene)
     fuji_scroll_factor = 0.62  # Juster dette for å balansere bevegelsen
     adjusted_scroll = scroll * fuji_scroll_factor
 
-    if scroll < WIDTH:  # Startområdet
+    if scroll < WIDTH:  # Bare tegne Fuji i startområdet
         screen.blit(fuji, (start_x - adjusted_scroll, fuji_y))
-    elif scroll > world_length - WIDTH - WIDTH:  # Sluttområdet
-        screen.blit(fuji, (end_x - adjusted_scroll, fuji_y))
 
 """
 def draw_fuji(screen, scroll, world_length):

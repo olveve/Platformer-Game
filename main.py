@@ -60,7 +60,7 @@ while running:
         person.x = world_length - person.width
 
     draw_bg_base(screen, scroll)
-    draw_fuji(screen, scroll, world_length)
+    draw_fuji(screen, scroll)
     draw_fg(screen, scroll)
     person.movement()
     person.draw(screen)
