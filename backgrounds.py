@@ -52,7 +52,7 @@ def draw_fuji(screen, scroll):
     start_x = -350  
     fuji_y = HEIGHT - fuji.get_height() + 25  
 
-    fuji_scroll_factor = 0.62  #
+    fuji_scroll_factor = 0.62
     adjusted_scroll = scroll * fuji_scroll_factor
 
     if scroll < WIDTH:  
@@ -67,11 +67,3 @@ def draw_house(screen, scroll, world_length):
 
     if scroll > world_length - WIDTH - WIDTH:  
         screen.blit(house, (house_x - adjusted_scroll, house_y))
-
-"""
-def draw_fuji(screen, scroll, world_length):
-    if scroll < WIDTH:  # Startområdet
-        screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))
-    elif scroll > world_length - WIDTH * 2:  # Sluttområdet
-        screen.blit(fuji, (world_length - WIDTH + 50 - scroll, HEIGHT - fuji.get_height() - 50))
-"""
