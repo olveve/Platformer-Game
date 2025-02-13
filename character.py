@@ -49,8 +49,8 @@ class Character:
         self.running = False
         #self.attack_type = 0
 
-        if self.y > HEIGHT - (self.rect.height):
-            self.y = HEIGHT - (self.rect.height)
+        if self.y > HEIGHT - (self.rect.height + 52):
+            self.y = HEIGHT - (self.rect.height + 52)
             self.vy = 0
             self.jumping = False
 
@@ -63,7 +63,7 @@ class Character:
                 self.x += self.vx
                 self.running = True
             if keys_pressed[pg.K_w]:
-                if self.y == HEIGHT - (self.rect.height):
+                if self.y == HEIGHT - (self.rect.height + 52):
                     self.vy = -22
                     self.jumping = True
 
@@ -122,7 +122,7 @@ class Character:
         else:
             self.update_action(0) #idle
 
-        animation_cooldown = 100
+        animation_cooldown = 150
         # oppdaterer bildet
         self.image = self.animation_list[self.action][self.frame_index]
         # sjekker im nok tid har gått siden siste oppdatering
@@ -154,7 +154,7 @@ class Character:
             target.hit = True
 
     def draw(self, screen):
-        pg.draw.rect(screen, (255, 0, 0), self.rect)
+        #pg.draw.rect(screen, (255, 0, 0), self.rect)
         screen.blit(self.image, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
