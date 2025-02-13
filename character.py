@@ -212,7 +212,6 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai")
-    
     enemies = []
     for i in range(5):
         enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy")
