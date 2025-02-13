@@ -12,7 +12,7 @@ class Character:
         self.image_scale = data[1]
         self.offset = data[2]
         self.animation_list = self.load_images(sprite_sheet, animation_steps)
-        self.action = 0 # 0:Idle, 1:Run, 2:Jump, 3:Attack, 4:Attack 2, 5:Attack 3, 6:Hit, 7:Death
+        self.action = 0 # 0:Idle, 1:walk, 2:Run, 3:Jump, 4:fall, 5:land, 6:death, 7:hit, 8:Attack, 9:Attack 2, 10:Attack 3
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pg.time.get_ticks() # tidspunktet for når bildet ble oppdatert
@@ -54,20 +54,20 @@ class Character:
         if self.y > HEIGHT - (self.rect.height):
             self.y = HEIGHT - (self.rect.height)
             self.vy = 0
+            self.jumping = False
 
         if self.char_type == "samurai":
             keys_pressed = pg.key.get_pressed()
-            if keys_pressed[pg.K_LEFT]:
+            if keys_pressed[pg.K_a]:
                 self.x -= self.vx
                 self.running = True
-            if keys_pressed[pg.K_RIGHT]:
+            if keys_pressed[pg.K_d]:
                 self.x += self.vx
                 self.running = True
-            if keys_pressed[pg.K_UP]:
-                self.jumping = True
+            if keys_pressed[pg.K_w]:
                 if self.y == HEIGHT - (self.rect.height):
                     self.vy = -22
-                    self.jumping = False
+                    self.jumping = True
 
         # Oppdatere rektangelet basert på spillerens posisjon
         self.rect.topleft = (self.x, self.y)
@@ -109,16 +109,16 @@ class Character:
     def update(self):
         # sjekker hva personen gjør eks: løper eller idle
         if self.hit == True:
-            self.update_action(6) # Hit
+            self.update_action(7) # Hit
         if self.attacking == True:
             if self.attack_type == 1:
-                self.update_action(3) # Attack 1
+                self.update_action(8) # Attack 1
             elif self.attack_type == 2: 
-                self.update_action(4) # Attack 2
+                self.update_action(9) # Attack 2
             elif self.attack_type == 3:
-                self.update_action(5) #Attack 3
+                self.update_action(10) #Attack 3
         if self.jumping == True:
-            self.update_action(1) #hopper
+            self.update_action(3) #hopper
         elif self.running == True:
             self.update_action(2) #løper
         else:

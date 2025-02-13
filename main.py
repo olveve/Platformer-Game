@@ -31,7 +31,7 @@ while running:
     keys = pg.key.get_pressed()
     scrolling = ""  # for scroll retningen
 
-    if keys[pg.K_RIGHT]:
+    if keys[pg.K_d]:
         if person.world_x + person.vx <= world_length - person.rect.width:
             person.world_x += person.vx
         else:
@@ -42,7 +42,7 @@ while running:
             bg_scroll = scroll
             scrolling = "R"
 
-    if keys[pg.K_LEFT]:
+    if keys[pg.K_a]:
         if person.world_x - person.vx >= 0:
             person.world_x -= person.vx
         else:
