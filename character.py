@@ -39,8 +39,6 @@ class Character:
                 if rect.right <= sheet_width and rect.bottom <= sheet_height:
                     temp_img = sprite_sheet.subsurface(rect)
                     temp_img_list.append(pg.transform.scale(temp_img, (self.size[0] * self.image_scale, self.size[1] * self.image_scale))) # en rad med bilder i liste
-                else:
-                    print("Rect out of bounds")
             animation_list.append(temp_img_list) # alle bilder i en liste, delt opp i flere lister
         return animation_list
 
