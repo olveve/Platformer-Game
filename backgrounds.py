@@ -29,6 +29,9 @@ sky = pg.transform.scale(sky, (1059, 504))
 house = pg.transform.scale(house, (1255, 604))
 fuji = pg.transform.scale(fuji, (1059, 700))
 
+# laste spritesheet
+samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
+
 
 
 def draw_bg_base(screen, scroll):
