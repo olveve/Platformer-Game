@@ -12,7 +12,8 @@ from character import create_characters
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person, npc = create_characters(world_length)
+person = create_characters(world_length)
+# person, npc = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -68,8 +69,8 @@ while running:
     person.movement(scroll, scrolling)
     person.update()
     person.draw(screen)
-    npc.update()
-    npc.draw(screen)
+    # npc.update()
+    # npc.draw(screen)
     
 
     """""

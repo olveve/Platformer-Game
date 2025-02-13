@@ -219,7 +219,6 @@ def create_characters(world_length):
         enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy")
         enemies.append(enemy)
     """
-    npc = Character(125, HEIGHT - 130, 2, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, "npc")
-    return person, npc
+    return person
 
 #person, world_length

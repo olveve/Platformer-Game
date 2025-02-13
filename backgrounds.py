@@ -33,7 +33,7 @@ double_house = pg.transform.scale(double_house, (1255, 604))
 
 # laste spritesheet
 samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
-npc_sheet = pg.image.load("assets/npc/NPC_Ronin.png").convert_alpha()
+# npc_sheet = pg.image.load("assets/npc/NPC_Ronin.png").convert_alpha()
 
 
 def draw_bg_base(screen, scroll):
