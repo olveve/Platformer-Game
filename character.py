@@ -8,6 +8,7 @@ class Character:
         self.x = x
         self.y = y
         self.vx = vx
+        #self.flip = flip
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -21,7 +22,8 @@ class Character:
         self.jumping = False
         self.attacking = False
         self.following = False
-        self.rect = pg.Rect(self.x, self.y, self.size[0] * self.image_scale, self.size[1] * self.image_scale)
+        self.rect = pg.Rect(self.x, self.y, 23*SAMURAI_SCALE, 25*SAMURAI_SCALE)
+        #self.rect = pg.Rect(self.x, self.y, self.size[0] * self.image_scale, self.size[1] * self.image_scale)
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
@@ -59,6 +61,7 @@ class Character:
             if keys_pressed[pg.K_a]:
                 self.x -= self.vx
                 self.running = True
+                self.flip = True
             if keys_pressed[pg.K_d]:
                 self.x += self.vx
                 self.running = True
@@ -154,7 +157,7 @@ class Character:
             target.hit = True
 
     def draw(self, screen):
-        #pg.draw.rect(screen, (255, 0, 0), self.rect)
+        pg.draw.rect(screen, (255, 0, 0), self.rect)
         screen.blit(self.image, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
