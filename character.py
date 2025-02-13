@@ -22,7 +22,7 @@ class Character:
         self.jumping = False
         self.attacking = False
         self.following = False
-        self.rect = pg.Rect(self.x, self.y, 23*SAMURAI_SCALE, 25*SAMURAI_SCALE)
+        self.rect = pg.Rect(self.x, self.y, 15*SAMURAI_SCALE, 25*SAMURAI_SCALE)
         #self.rect = pg.Rect(self.x, self.y, self.size[0] * self.image_scale, self.size[1] * self.image_scale)
         self.attack_type = 0
         self.attack_cooldown = 0
