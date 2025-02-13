@@ -4,7 +4,7 @@ from assets import *
 from backgrounds import samurai_sheet
 
 class Character:
-    def __init__(self, x, y, vx, data, sprite_sheet, animation_steps, char_type):
+    def __init__(self, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length):
         self.x = x
         self.y = y
         self.vx = vx
@@ -23,12 +23,12 @@ class Character:
         self.attacking = False
         self.following = False
         self.rect = pg.Rect(self.x, self.y, 15*SAMURAI_SCALE, 25*SAMURAI_SCALE)
-        #self.rect = pg.Rect(self.x, self.y, self.size[0] * self.image_scale, self.size[1] * self.image_scale)
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
         self.health = 100
         self.char_type = char_type
+        self.world_length = world_length
 
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
@@ -45,7 +45,7 @@ class Character:
         return animation_list
 
 
-    def movement(self, scroll, scrolling):
+    def movement(self, scroll, scrolling, target):
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
@@ -73,10 +73,9 @@ class Character:
         # Oppdatere rektangelet basert på spillerens posisjon
         self.rect.topleft = (self.x, self.y)
 
-        """"
 
         if self.char_type == "enemy":
-            distance_to_person = abs(self.x - self.target.x)
+            distance_to_person = abs(self.x - target.x)
 
             if self.y > HEIGHT - (self.rect.height + 67):
                 self.y = HEIGHT - (self.rect.height + 67)
@@ -86,15 +85,18 @@ class Character:
                 if distance_to_person <= 300:
                     self.following = True
                 if self.following:
-                    if self.x < self.target.x:
+                    if self.x < target.x:
                         self.x += self.vx
-                    if self.x > self.target.x:
+                    if self.x > target.x:
                         self.x -= self.vx
 
             #elif scrolling and distance_to_person <= WIDTH:
             #   self.vx = 0
             else:
-                self.x += scroll  # Adjust enemy position based on scroll
+                try:
+                    self.x += int(scroll) # Adjust enemy position based on scroll
+                except ValueError:
+                    print("Scroll is not an integer")
 
             # Ensure the enemy doesn't move beyond the world boundaries
             if self.x < 0:
@@ -105,7 +107,6 @@ class Character:
             # Oppdatere rektangelet basert på fiendens posisjon
             self.rect.topleft = (self.x, self.y)
 
-            """
 
     def update(self):
         # sjekker hva personen gjør eks: løper eller idle
@@ -211,10 +212,10 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai")
+    person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length)
     enemies = []
     for i in range(5):
-        enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy")
+        enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
         enemies.append(enemy)
     return person, enemies
 

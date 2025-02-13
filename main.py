@@ -12,7 +12,7 @@ from character import create_characters
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person = create_characters(world_length)
+person, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -55,22 +55,24 @@ while running:
 
     person.x = person.world_x - scroll
 
+    """""
     # KAN MULIG FJERNES: siden vi har world.x nå
     if person.x < 0:
         person.x = 0
     if person.x > world_length - person.rect.width:
         person.x = world_length - person.rect.width
+    """
 
     draw_bg_base(screen, scroll)
     draw_fuji(screen, scroll)
     draw_house(screen, scroll, world_length)
     draw_fg(screen, scroll)
-    person.movement(scroll, scrolling)
+    person.movement(scroll, scrolling, None)
     person.update()
     person.draw(screen)
     
 
-    """""
+    
     if enemies:
         enemy_factor = enemies[0].vx / person.vx
     else:
@@ -83,9 +85,9 @@ while running:
         speed = person.vx * enemy_factor
 
     for enemy in enemies:
-        enemy.movement(scrolling, speed)
+        enemy.movement(scrolling, speed, person)
         enemy.draw(screen)
-        """
+        enemy.update()
     
     pg.display.update()
 
