@@ -31,11 +31,16 @@ class Character:
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
         animation_list = []
+        sheet_width, sheet_height = sprite_sheet.get_size()
         for y, animation in enumerate(animation_steps): # for loop for y-aksen  enumerate er som en tracker som sier hvor mange ganger vi har gått gjennom loopen. samme som y=0 også y+=1
             temp_img_list = []
             for x in range(animation): # for loop for x-aksen
-                temp_img = sprite_sheet.subsurface(x * self.size[0], y * self.size[1], self.size[0], self.size[1])
-                temp_img_list.append(pg.transform.scale(temp_img, (self.size[0] * self.image_scale, self.size[1] * self.image_scale))) # en rad med bilder i liste
+                rect = pg.Rect(x * self.size[0], y * self.size[1], self.size[0], self.size[1])
+                if rect.right <= sheet_width and rect.bottom <= sheet_height:
+                    temp_img = sprite_sheet.subsurface(rect)
+                    temp_img_list.append(pg.transform.scale(temp_img, (self.size[0] * self.image_scale, self.size[1] * self.image_scale))) # en rad med bilder i liste
+                else:
+                    print("Rect out of bounds")
             animation_list.append(temp_img_list) # alle bilder i en liste, delt opp i flere lister
         return animation_list
 
@@ -46,8 +51,8 @@ class Character:
         self.running = False
         #self.attack_type = 0
 
-        if self.y > HEIGHT - (self.rect.height + 67):
-            self.y = HEIGHT - (self.rect.height + 67)
+        if self.y > HEIGHT - (self.rect.height):
+            self.y = HEIGHT - (self.rect.height)
             self.vy = 0
 
         if self.char_type == "samurai":
@@ -60,7 +65,7 @@ class Character:
                 self.running = True
             if keys_pressed[pg.K_UP]:
                 self.jumping = True
-                if self.y == HEIGHT - (self.rect.height + 67):
+                if self.y == HEIGHT - (self.rect.height):
                     self.vy = -22
                     self.jumping = False
 
@@ -113,13 +118,13 @@ class Character:
             elif self.attack_type == 3:
                 self.update_action(5) #Attack 3
         if self.jumping == True:
-            self.update_action(2) #hopper
+            self.update_action(1) #hopper
         elif self.running == True:
-            self.update_action(1) #løper
+            self.update_action(2) #løper
         else:
             self.update_action(0) #idle
 
-        animation_cooldown = 500
+        animation_cooldown = 100
         # oppdaterer bildet
         self.image = self.animation_list[self.action][self.frame_index]
         # sjekker im nok tid har gått siden siste oppdatering

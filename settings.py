@@ -16,6 +16,6 @@ GRAVITY = 1
 # Dersom den starter på 1 blir lista: [4, 8, 4, 3, 2, 4, 4, 9, 10, 15]. Dette er også antall frames som er oppgitt i nettsiden
 SAMURAI_ANIMATION_STEPS = [4, 8, 4, 3, 2, 4, 4, 9, 10, 15]
 SAMURAI_SIZE = [48, 32]
-SAMURAI_SCALE = 2
+SAMURAI_SCALE = 3
 SAMURAI_OFFSET = [5, 5]
 SAMURAI_DATA = [SAMURAI_SIZE, SAMURAI_SCALE, SAMURAI_OFFSET]
