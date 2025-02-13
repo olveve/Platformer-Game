@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet
+from backgrounds import samurai_sheet, npc_sheet
 
 class Character:
     def __init__(self, x, y, vx, data, sprite_sheet, animation_steps, char_type):
@@ -46,6 +46,7 @@ class Character:
 
 
     def movement(self, scroll, scrolling):
+    
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
@@ -211,11 +212,14 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai")
+    person = Character(400, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai")
+    """
     enemies = []
     for i in range(5):
         enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy")
         enemies.append(enemy)
-    return person, enemies
+    """
+    npc = Character(125, HEIGHT - 130, 2, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, "npc")
+    return person, npc
 
 #person, world_length

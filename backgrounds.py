@@ -14,6 +14,7 @@ sky = pg.image.load("assets/Background/Sky.png").convert_alpha()
 
 house = pg.image.load("assets/Background/House.png").convert_alpha()
 fuji = pg.image.load("assets/Background/Fuji.png").convert_alpha()
+double_house = pg.image.load("assets/Background/Shrine_Multiple.png").convert_alpha()
 
 
 gras = pg.transform.scale(gras, (1059, 504))
@@ -28,10 +29,11 @@ sky = pg.transform.scale(sky, (1059, 504))
 
 house = pg.transform.scale(house, (1255, 604))
 fuji = pg.transform.scale(fuji, (1059, 700))
+double_house = pg.transform.scale(double_house, (1255, 604))
 
 # laste spritesheet
 samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
-
+npc_sheet = pg.image.load("assets/npc/NPC_Ronin.png").convert_alpha()
 
 
 def draw_bg_base(screen, scroll):
@@ -68,5 +70,6 @@ def draw_house(screen, scroll, world_length):
     house_scroll_factor = 0.62  
     adjusted_scroll = scroll * house_scroll_factor
 
-    if scroll > world_length - WIDTH - WIDTH:  
+    if scroll > world_length - WIDTH - WIDTH:
+        screen.blit(double_house, (house_x - adjusted_scroll + 400, house_y ))  
         screen.blit(house, (house_x - adjusted_scroll, house_y))
