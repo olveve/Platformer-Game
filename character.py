@@ -161,18 +161,7 @@ class Character:
         screen.blit(self.image, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
-"""""
-class Samurai(Character):
-    def __init__(self, x, y, vx):
-        super().__init__(x, y, vx, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS)
-        self.color = (0, 255, 0)
-        
-    def draw(self, screen):
-        super.draw(screen)
 
-    def load_images(self, sprite_sheet, animation_steps):
-        return super().load_images(sprite_sheet, animation_steps)
-"""
 """""
 class Enemy(Character):
     def __init__(self, x, y, vx, target, world_length):
@@ -223,13 +212,11 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai")
-    return person
-    """""
+    
     enemies = []
     for i in range(5):
         enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy")
         enemies.append(enemy)
     return person, enemies
-    """
 
 #person, world_length
