@@ -26,25 +26,44 @@ mountain_back = pg.transform.scale(mountain_back, (1059, 504))
 clouds = pg.transform.scale(clouds, (1059, 504))
 sky = pg.transform.scale(sky, (1059, 504))
 
-house = pg.transform.scale(house, (1059, 504))
-fuji = pg.transform.scale(fuji, (1059, 504))
+house = pg.transform.scale(house, (1255, 604))
+fuji = pg.transform.scale(fuji, (1059, 700))
 
 
 
-def draw_bg(screen, scroll):
+def draw_bg_base(screen, scroll):
     width = sky.get_width()
-    for x in range(5):  # Adjust the range to ensure seamless scrolling
+    for x in range(5):
         screen.blit(sky, ((x * width) - scroll * 0.1, 0))
         screen.blit(clouds, ((x * width) - scroll * 0.2, HEIGHT - clouds.get_height() - 150))
         screen.blit(mountain_back, ((x * width) - scroll * 0.3, HEIGHT - mountain_back.get_height()))
         screen.blit(mountain_middle, ((x * width) - scroll * 0.4, HEIGHT - mountain_middle.get_height()))
         screen.blit(mountain_front, ((x * width) - scroll * 0.5, HEIGHT - mountain_front.get_height()))
+
+def draw_fg(screen, scroll):
+    width = gras.get_width()
+    for x in range(5):
         screen.blit(backgroundtrees, ((x * width) - scroll * 0.6, HEIGHT - backgroundtrees.get_height()))
         screen.blit(trees, ((x * width) - scroll * 0.7, HEIGHT - trees.get_height()))
         screen.blit(ground, ((x * width) - scroll * 0.8, HEIGHT - ground.get_height()))
         screen.blit(gras, ((x * width) - scroll * 0.9, HEIGHT - gras.get_height()))
+        
+def draw_fuji(screen, scroll):
+    start_x = -350  
+    fuji_y = HEIGHT - fuji.get_height() + 25  
 
-  #  if scroll <= 0:
-  #      screen.blit(fuji, (50, HEIGHT - fuji.get_height() - 50))
-  #  if scroll >= world_length - WIDTH:
-  #      screen.blit(house, (world_length - WIDTH + 400, HEIGHT - house.get_height() - 50)) 
+    fuji_scroll_factor = 0.62
+    adjusted_scroll = scroll * fuji_scroll_factor
+
+    if scroll < WIDTH:  
+        screen.blit(fuji, (start_x - adjusted_scroll, fuji_y))
+
+def draw_house(screen, scroll, world_length):
+    house_x = world_length - WIDTH - 1720 
+    house_y = HEIGHT - house.get_height()  
+
+    house_scroll_factor = 0.62  
+    adjusted_scroll = scroll * house_scroll_factor
+
+    if scroll > world_length - WIDTH - WIDTH:  
+        screen.blit(house, (house_x - adjusted_scroll, house_y))

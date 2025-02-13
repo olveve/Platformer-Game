@@ -6,7 +6,7 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
 
-from backgrounds import draw_bg
+from backgrounds import draw_bg_base, draw_fg, draw_fuji, draw_house
 from character import create_characters
 
 world_length = 5 * WIDTH
@@ -59,7 +59,10 @@ while running:
     if person.x > world_length - person.width:
         person.x = world_length - person.width
 
-    draw_bg(screen, bg_scroll)
+    draw_bg_base(screen, scroll)
+    draw_fuji(screen, scroll)
+    draw_house(screen, scroll, world_length)
+    draw_fg(screen, scroll)
     person.movement()
     person.draw(screen)
 
