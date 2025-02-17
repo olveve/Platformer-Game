@@ -13,7 +13,7 @@ class Character:
         self.image_scale = data[1]
         self.offset = data[2]
         self.animation_list = self.load_images(sprite_sheet, animation_steps)
-        self.action = 0 # 0:Idle, 1:walk, 2:Run, 3:Jump, 4:fall, 5:land, 6:death, 7:hit, 8:Attack, 9:Attack 2, 10:Attack 3
+        self.action = 0 # 0:Idle, 1:walk, 2:Run, 3:Jump, 4:death, 5:hit, 6:Attack, 7:Attack 2, 8:Attack 3
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pg.time.get_ticks() # tidspunktet for når bildet ble oppdatert
@@ -57,74 +57,76 @@ class Character:
             self.y = HEIGHT - (self.rect.height + 67)
             self.vy = 0
             self.jumping = False
+        
+        if self.attacking == False:
 
-        if self.char_type == "samurai":
-            keys_pressed = pg.key.get_pressed()
-            #Kan bare gjøre andre ting om jeg ikke agriper
-            if self.attacking == False:
-                if keys_pressed[pg.K_a]:
-                    self.x -= (self.vx/3)
-                    self.walking = True
-                    self.flip = True
-                if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
-                    self.x -= self.vx
-                    self.running = True
-                    self.flip = True
-                if keys_pressed[pg.K_d]:
-                    self.x += (self.vx/3)
-                    self.walking = True
-                    self.flip = False
-                if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
-                    self.x += self.vx
-                    self.running = True
-                if keys_pressed[pg.K_w]:
-                    if self.y == HEIGHT - (self.rect.height + 67):
-                        self.vy = -22
-                        self.jumping = True
-                if keys_pressed[pg.K_l] or keys_pressed[pg.K_k]:
-                    self.attack(screen, target)
-                    if keys_pressed[pg.K_l]:
-                        self.attack_type = 1
-                        self.attacking = True
-                    elif keys_pressed[pg.K_k]:
-                        self.attack_type = 2
-                        self.attacking = True
-
-        # Oppdatere rektangelet basert på spillerens posisjon
-        self.rect.topleft = (self.x, self.y)
-
-        if self.char_type == "boss":
-            distance_to_person = abs(self.x - target.x)
-
-            if self.y > HEIGHT - (self.rect.height + 67):
-                self.y = HEIGHT - (self.rect.height + 67)
-                self.vy = 0
-
-            if not scrolling:
-                if distance_to_person <= 300:
-                    self.following = True
-                if self.following:
-                    if self.x < target.x:
-                        self.x += self.vx
-                    if self.x > target.x:
+            if self.char_type == "samurai":
+                keys_pressed = pg.key.get_pressed()
+                #Kan bare gjøre andre ting om jeg ikke agriper
+                if self.attacking == False:
+                    if keys_pressed[pg.K_a]:
+                        self.x -= (self.vx/3)
+                        self.walking = True
+                        self.flip = True
+                    if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
                         self.x -= self.vx
+                        self.running = True
+                        self.flip = True
+                    if keys_pressed[pg.K_d]:
+                        self.x += (self.vx/3)
+                        self.walking = True
+                        self.flip = False
+                    if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
+                        self.x += self.vx
+                        self.running = True
+                    if keys_pressed[pg.K_w]:
+                        if self.y == HEIGHT - (self.rect.height + 67):
+                            self.vy = -22
+                            self.jumping = True
+                    if keys_pressed[pg.K_l] or keys_pressed[pg.K_k]:
+                        self.attack(screen, target)
+                        if keys_pressed[pg.K_l]:
+                            self.attack_type = 1
+                        if keys_pressed[pg.K_k]:
+                            self.attack_type = 2
 
-            #elif scrolling and distance_to_person <= WIDTH:
-            #   self.vx = 0
-            else:
-                try:
-                    self.x += int(scroll) # Adjust enemy position based on scroll
-                except ValueError:
-                    pass
-
-            # Ensure the enemy doesn't move beyond the world boundaries
-            if self.x < 0:
-                self.x = 0
-            if self.x > self.world_length - self.rect.width:
-                self.x = self.world_length - self.rect.width
-
-            # Oppdatere rektangelet basert på fiendens posisjon
+            # Oppdatere rektangelet basert på spillerens posisjon
             self.rect.topleft = (self.x, self.y)
+
+            if self.char_type == "boss":
+                distance_to_person = abs(self.x - target.x)
+
+                if self.y > HEIGHT - (self.rect.height + 67):
+                    self.y = HEIGHT - (self.rect.height + 67)
+                    self.vy = 0
+
+                if not scrolling:
+                    if distance_to_person <= 300:
+                        self.following = True
+                    if self.following:
+                        if self.x < target.x:
+                            self.x += self.vx
+                        if self.x > target.x:
+                            self.x -= self.vx
+
+                #elif scrolling and distance_to_person <= WIDTH:
+                #   self.vx = 0
+                else:
+                    try:
+                        self.x += int(scroll) # Adjust enemy position based on scroll
+                    except ValueError:
+                        pass
+
+                # Ensure the enemy doesn't move beyond the world boundaries
+                if self.x < 0:
+                    self.x = 0
+                if self.x > self.world_length - self.rect.width:
+                    self.x = self.world_length - self.rect.width
+
+                # Oppdatere rektangelet basert på fiendens posisjon
+                self.rect.topleft = (self.x, self.y)
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
 
         """""
         if self.char_type == "enemy":
@@ -166,15 +168,15 @@ class Character:
     def update(self):
         # sjekker hva personen gjør eks: løper eller idle
         if self.hit == True:
-            self.update_action(7) # Hit
-        if self.attacking == True:
+            self.update_action(4) # Hit
+        elif self.attacking == True:
             if self.attack_type == 1:
-                self.update_action(8) # Attack 1
+                self.update_action(6) # Attack 1
             elif self.attack_type == 2: 
-                self.update_action(9) # Attack 2
+                self.update_action(7) # Attack 2
             elif self.attack_type == 3:
-                self.update_action(10) #Attack 3
-        if self.jumping == True:
+                self.update_action(8) #Attack 3
+        elif self.jumping == True:
             self.update_action(3) #hopper
         elif self.running == True:
             self.update_action(2) #løper
@@ -194,8 +196,9 @@ class Character:
         if self.frame_index >= len(self.animation_list[self.action]): 
             self.frame_index = 0
             # Sjekker om noen har angrepet
-            if self.action == 8 or self.action == 9 or self.action == 10:
+            if self.action == 6 or self.action == 7 or self.action == 8:
                 self.attacking = False
+                self.attack_cooldown = 50
 
 
     def update_action(self, new_action):

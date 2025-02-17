@@ -105,7 +105,7 @@ while running:
     """
 
     
-
+    
     if boss:
         boss_factor = boss.vx / person.vx
     else:
