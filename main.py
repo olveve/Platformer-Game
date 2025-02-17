@@ -37,7 +37,6 @@ while running:
     clock.tick(FPS)
     keys = pg.key.get_pressed()
     scrolling = ""  # for scroll retningen
-
     
 
     draw_bg_base(screen, scroll)

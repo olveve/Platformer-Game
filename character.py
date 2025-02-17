@@ -59,7 +59,7 @@ class Character:
             self.vy = 0
             self.jumping = False
         
-        if self.attacking == False:
+        if self.attacking == False and self.alive == True:
 
             if self.char_type == "samurai":
                 keys_pressed = pg.key.get_pressed()
@@ -190,7 +190,7 @@ class Character:
         else:
             self.update_action(0) # Idle
 
-        animation_cooldown = 150
+        animation_cooldown = 100
         # oppdaterer bildet
         self.image = self.animation_list[self.action][self.frame_index]
         # sjekker im nok tid har gått siden siste oppdatering
@@ -200,7 +200,7 @@ class Character:
         # sjekker om vi har nådd slutten av animasjonen
         if self.frame_index >= len(self.animation_list[self.action]):
             if self.alive == False:
-                self.frame_index = len(self.animation_list[self.ation]) - 1
+                self.frame_index = len(self.animation_list[self.action]) - 1
             else:
                 self.frame_index = 0
             # Sjekker om noen har angrepet
@@ -213,6 +213,15 @@ class Character:
                 self.attack_cooldown = 20
 
 
+    def attack(self, screen, target):
+        if self.attack_cooldown == 0:
+            self.attacking = True
+            attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
+            if attacking_rect.colliderect(target.rect):
+                target.health -= 10
+                target.hit = True
+            pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+
     def update_action(self, new_action):
         # sjekker om handlingen har endret seg
         if new_action != self.action:
@@ -221,14 +230,6 @@ class Character:
             self.frame_index = 0
             # oppdaterer tiden
             self.update_time = pg.time.get_ticks()
-
-    def attack(self, screen, target):
-        self.attacking = True
-        attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
-        if attacking_rect.colliderect(target.rect):
-            target.health -= 10
-            target.hit = True
-        pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
     def draw(self, screen):
         img = pg.transform.flip(self.image, self.flip, False)
@@ -287,7 +288,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 100)
+    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 10)
     return person, boss
     """""
     enemies = []
