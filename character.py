@@ -4,11 +4,11 @@ from assets import *
 from backgrounds import samurai_sheet
 
 class Character:
-    def __init__(self, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length):
+    def __init__(self, x, y, vx, flip, data, sprite_sheet, animation_steps, char_type, world_length):
         self.x = x
         self.y = y
         self.vx = vx
-        #self.flip = flip
+        self.flip = flip
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -45,36 +45,46 @@ class Character:
         return animation_list
 
 
-    def movement(self, scroll, scrolling, target):
+    def movement(self, scroll, scrolling, target, screen):
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
-        #self.attack_type = 0
+        self.attack_type = 0
 
-        if self.y > HEIGHT - (self.rect.height + 52):
-            self.y = HEIGHT - (self.rect.height + 52)
+        if self.y > HEIGHT - (self.rect.height + 67):
+            self.y = HEIGHT - (self.rect.height + 67)
             self.vy = 0
             self.jumping = False
 
         if self.char_type == "samurai":
+            if self.flip == True:
+                pg.transform.flip(self.image, True, False)
             keys_pressed = pg.key.get_pressed()
-            if keys_pressed[pg.K_a]:
-                self.x -= self.vx
-                self.running = True
-                self.flip = True
-            if keys_pressed[pg.K_d]:
-                self.x += self.vx
-                self.running = True
-            if keys_pressed[pg.K_w]:
-                if self.y == HEIGHT - (self.rect.height + 52):
-                    self.vy = -22
-                    self.jumping = True
+            #Kan bare gjøre andre ting om jeg ikke agriper
+            if self.attacking == False:
+                if keys_pressed[pg.K_a]:
+                    self.x -= self.vx
+                    self.running = True
+                    self.flip = True
+                if keys_pressed[pg.K_d]:
+                    self.x += self.vx
+                    self.running = True
+                    self.flip = False
+                if keys_pressed[pg.K_w]:
+                    if self.y == HEIGHT - (self.rect.height + 67):
+                        self.vy = -22
+                        self.jumping = True
+                if keys_pressed[pg.K_l] or keys_pressed[pg.K_k]:
+                    self.attack(screen, target)
+                    if keys_pressed[pg.K_l]:
+                        self.attack_type = 1
+                    elif keys_pressed[pg.K_k]:
+                        self.attack_type = 2
 
         # Oppdatere rektangelet basert på spillerens posisjon
         self.rect.topleft = (self.x, self.y)
 
-
-        if self.char_type == "enemy":
+        if self.char_type == "boss":
             distance_to_person = abs(self.x - target.x)
 
             if self.y > HEIGHT - (self.rect.height + 67):
@@ -96,7 +106,7 @@ class Character:
                 try:
                     self.x += int(scroll) # Adjust enemy position based on scroll
                 except ValueError:
-                    print("Scroll is not an integer")
+                    pass
 
             # Ensure the enemy doesn't move beyond the world boundaries
             if self.x < 0:
@@ -106,6 +116,42 @@ class Character:
 
             # Oppdatere rektangelet basert på fiendens posisjon
             self.rect.topleft = (self.x, self.y)
+
+        """""
+        if self.char_type == "enemy":
+            distance_to_person = abs(self.x - target.x)
+
+            if self.y > HEIGHT - (self.rect.height + 67):
+                self.y = HEIGHT - (self.rect.height + 67)
+                self.vy = 0
+
+            if not scrolling:
+                if distance_to_person <= 300:
+                    self.following = True
+                if self.following:
+                    if self.x < target.x:
+                        self.x += self.vx
+                    if self.x > target.x:
+                        self.x -= self.vx
+        
+
+            #elif scrolling and distance_to_person <= WIDTH:
+            #   self.vx = 0
+            else:
+                try:
+                    self.x += int(scroll) # Adjust enemy position based on scroll
+                except ValueError:
+                    pass
+
+            # Ensure the enemy doesn't move beyond the world boundaries
+            if self.x < 0:
+                self.x = 0
+            if self.x > self.world_length - self.rect.width:
+                self.x = self.world_length - self.rect.width
+
+            # Oppdatere rektangelet basert på fiendens posisjon
+            self.rect.topleft = (self.x, self.y)
+            """
 
 
     def update(self):
@@ -137,7 +183,7 @@ class Character:
         if self.frame_index >= len(self.animation_list[self.action]): 
             self.frame_index = 0
             # Sjekker om noen har angrepet
-            if self.action == 3 or self.action == 4 or self.action == 5:
+            if self.action == 8 or self.action == 9 or self.action == 10:
                 self.attacking = False
 
 
@@ -152,10 +198,11 @@ class Character:
 
     def attack(self, screen, target):
         self.attacking = True
-        attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width), self.rect.y, 2 * self.rect.width, self.rect.height)
+        attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
         if attacking_rect.colliderect(target.rect):
             target.health -= 10
             target.hit = True
+        pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
     def draw(self, screen):
         pg.draw.rect(screen, (255, 0, 0), self.rect)
@@ -212,11 +259,15 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length)
+    person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length)
+    boss = Character(400, 100, 5, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length)
+    return person, boss
+    """""
     enemies = []
     for i in range(5):
-        enemy = Character(500 * i + 800, 100, 2, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
+        enemy = Character(500 * i + 800, 100, 2, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
         enemies.append(enemy)
     return person, enemies
+    """
 
 #person, world_length

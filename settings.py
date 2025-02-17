@@ -10,6 +10,10 @@ FPS = 60
 
 GRAVITY = 1
 
+YELLOW = (255, 255, 0)
+RED = (255, 0, 0)
+WHITE = (255, 255, 255)
+
 #definerer antall steg i hver animasjon
 
 # Litt usikker på om animation_steps starter på 0 eller 1. Her har jeg tatt utgangspunkt i at det starter på 0
