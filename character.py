@@ -4,7 +4,7 @@ from assets import *
 from backgrounds import samurai_sheet
 
 class Character:
-    def __init__(self, x, y, vx, flip, data, sprite_sheet, animation_steps, char_type, world_length):
+    def __init__(self, x, y, vx, flip, data, sprite_sheet, animation_steps, char_type, world_length, health):
         self.x = x
         self.y = y
         self.vx = vx
@@ -27,7 +27,7 @@ class Character:
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
-        self.health = 100
+        self.health = health
         self.char_type = char_type
         self.world_length = world_length
 
@@ -168,7 +168,7 @@ class Character:
     def update(self):
         # sjekker hva personen gjør eks: løper eller idle
         if self.hit == True:
-            self.update_action(4) # Hit
+            self.update_action(5) # Hit
         elif self.attacking == True:
             if self.attack_type == 1:
                 self.update_action(6) # Attack 1
@@ -199,6 +199,10 @@ class Character:
             if self.action == 6 or self.action == 7 or self.action == 8:
                 self.attacking = False
                 self.attack_cooldown = 50
+            if self.action == 5:
+                self.hit = False
+                self.attacking = False
+                self.attack_cooldown = 20
 
 
     def update_action(self, new_action):
@@ -274,8 +278,8 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length)
-    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length)
+    person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
+    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 200)
     return person, boss
     """""
     enemies = []
