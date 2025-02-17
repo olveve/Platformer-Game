@@ -53,6 +53,16 @@ while running:
 
     if keys[pg.K_d]:
         if person.world_x + person.vx <= world_length - person.rect.width:
+            person.world_x += person.vx/3
+        else:
+            person.world_x = world_length - person.rect.width
+
+        if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
+            scroll = person.world_x - (WIDTH - scroll_threshold)
+            bg_scroll = scroll
+            scrolling = "R"
+    if keys[pg.K_d] and keys[pg.K_LSHIFT]:
+        if person.world_x + person.vx <= world_length - person.rect.width:
             person.world_x += person.vx
         else:
             person.world_x = world_length - person.rect.width
@@ -63,6 +73,17 @@ while running:
             scrolling = "R"
 
     if keys[pg.K_a]:
+        if person.world_x - person.vx >= 0:
+            person.world_x -= person.vx/3
+        else:
+            person.world_x = 0
+
+        if person.world_x - scroll < scroll_threshold and scroll > 0:
+            scroll = person.world_x - scroll_threshold
+            bg_scroll = scroll
+            scrolling = "L"
+    
+    if keys[pg.K_a] and keys[pg.K_LSHIFT]:
         if person.world_x - person.vx >= 0:
             person.world_x -= person.vx
         else:

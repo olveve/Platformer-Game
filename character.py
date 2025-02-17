@@ -18,6 +18,7 @@ class Character:
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pg.time.get_ticks() # tidspunktet for når bildet ble oppdatert
         self.vy = 0
+        self.walking = False
         self.running = False
         self.jumping = False
         self.attacking = False
@@ -49,6 +50,7 @@ class Character:
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
+        self.walking = False
         self.attack_type = 0
 
         if self.y > HEIGHT - (self.rect.height + 67):
@@ -61,13 +63,20 @@ class Character:
             #Kan bare gjøre andre ting om jeg ikke agriper
             if self.attacking == False:
                 if keys_pressed[pg.K_a]:
+                    self.x -= (self.vx/3)
+                    self.walking = True
+                    self.flip = True
+                if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
                     self.x -= self.vx
                     self.running = True
                     self.flip = True
                 if keys_pressed[pg.K_d]:
+                    self.x += (self.vx/3)
+                    self.walking = True
+                    self.flip = False
+                if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
                     self.x += self.vx
                     self.running = True
-                    self.flip = False
                 if keys_pressed[pg.K_w]:
                     if self.y == HEIGHT - (self.rect.height + 67):
                         self.vy = -22
@@ -76,8 +85,10 @@ class Character:
                     self.attack(screen, target)
                     if keys_pressed[pg.K_l]:
                         self.attack_type = 1
+                        self.attacking = True
                     elif keys_pressed[pg.K_k]:
                         self.attack_type = 2
+                        self.attacking = True
 
         # Oppdatere rektangelet basert på spillerens posisjon
         self.rect.topleft = (self.x, self.y)
@@ -167,6 +178,8 @@ class Character:
             self.update_action(3) #hopper
         elif self.running == True:
             self.update_action(2) #løper
+        elif self.walking == True:
+            self.update_action(1) # gå
         else:
             self.update_action(0) #idle
 
@@ -204,7 +217,7 @@ class Character:
 
     def draw(self, screen):
         img = pg.transform.flip(self.image, self.flip, False)
-        pg.draw.rect(screen, (255, 0, 0), self.rect)
+        #pg.draw.rect(screen, (255, 0, 0), self.rect)
         screen.blit(img, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
@@ -259,7 +272,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length)
-    boss = Character(400, 100, 5, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length)
+    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length)
     return person, boss
     """""
     enemies = []
