@@ -27,6 +27,7 @@ class Character:
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
+        self.alive = True
         self.health = health
         self.char_type = char_type
         self.world_length = world_length
@@ -64,6 +65,7 @@ class Character:
                 keys_pressed = pg.key.get_pressed()
                 #Kan bare gjøre andre ting om jeg ikke agriper
                 if self.attacking == False:
+                    #movement
                     if keys_pressed[pg.K_a]:
                         self.x -= (self.vx/3)
                         self.walking = True
@@ -79,19 +81,18 @@ class Character:
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
                         self.x += self.vx
                         self.running = True
+                    #Hoppe
                     if keys_pressed[pg.K_w]:
                         if self.y == HEIGHT - (self.rect.height + 67):
                             self.vy = -22
                             self.jumping = True
+                    #angrep
                     if keys_pressed[pg.K_l] or keys_pressed[pg.K_k]:
                         self.attack(screen, target)
                         if keys_pressed[pg.K_l]:
                             self.attack_type = 1
                         if keys_pressed[pg.K_k]:
                             self.attack_type = 2
-
-            # Oppdatere rektangelet basert på spillerens posisjon
-            self.rect.topleft = (self.x, self.y)
 
             if self.char_type == "boss":
                 distance_to_person = abs(self.x - target.x)
@@ -123,8 +124,8 @@ class Character:
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
 
-                # Oppdatere rektangelet basert på fiendens posisjon
-                self.rect.topleft = (self.x, self.y)
+            # Oppdatere rektangelet basert på fiendens posisjon
+            self.rect.topleft = (self.x, self.y)
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
@@ -167,6 +168,10 @@ class Character:
 
     def update(self):
         # sjekker hva personen gjør eks: løper eller idle
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.update_action(4) # Dead
         if self.hit == True:
             self.update_action(5) # Hit
         elif self.attacking == True:
@@ -177,13 +182,13 @@ class Character:
             elif self.attack_type == 3:
                 self.update_action(8) #Attack 3
         elif self.jumping == True:
-            self.update_action(3) #hopper
+            self.update_action(3) #h Jumping
         elif self.running == True:
-            self.update_action(2) #løper
+            self.update_action(2) # Running 
         elif self.walking == True:
-            self.update_action(1) # gå
+            self.update_action(1) # Walking
         else:
-            self.update_action(0) #idle
+            self.update_action(0) # Idle
 
         animation_cooldown = 150
         # oppdaterer bildet
@@ -193,12 +198,15 @@ class Character:
             self.frame_index += 1 
             self.update_time = pg.time.get_ticks()
         # sjekker om vi har nådd slutten av animasjonen
-        if self.frame_index >= len(self.animation_list[self.action]): 
-            self.frame_index = 0
+        if self.frame_index >= len(self.animation_list[self.action]):
+            if self.alive == False:
+                self.frame_index = len(self.animation_list[self.ation]) - 1
+            else:
+                self.frame_index = 0
             # Sjekker om noen har angrepet
             if self.action == 6 or self.action == 7 or self.action == 8:
                 self.attacking = False
-                self.attack_cooldown = 50
+                self.attack_cooldown = 20
             if self.action == 5:
                 self.hit = False
                 self.attacking = False
@@ -279,7 +287,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 200)
+    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 100)
     return person, boss
     """""
     enemies = []

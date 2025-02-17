@@ -19,10 +19,10 @@ scroll_threshold = 200
 
 # health bar
 def health_bar(health, x, y,):
-    ratio = health / 100
+    ratio_person = health / person.health
     pg.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
     pg.draw.rect(screen, RED, (x, y, 400, 30))
-    pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio, 30))
+    pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio_person, 30))
 
 # Reell posisjon i verden
 person.world_x = person.x  
