@@ -217,7 +217,7 @@ class Character:
 
     def draw(self, screen):
         img = pg.transform.flip(self.image, self.flip, False)
-        #pg.draw.rect(screen, (255, 0, 0), self.rect)
+        pg.draw.rect(screen, (255, 0, 0), self.rect)
         screen.blit(img, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
