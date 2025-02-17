@@ -57,8 +57,6 @@ class Character:
             self.jumping = False
 
         if self.char_type == "samurai":
-            if self.flip == True:
-                pg.transform.flip(self.image, True, False)
             keys_pressed = pg.key.get_pressed()
             #Kan bare gjøre andre ting om jeg ikke agriper
             if self.attacking == False:
@@ -205,8 +203,9 @@ class Character:
         pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
     def draw(self, screen):
+        img = pg.transform.flip(self.image, self.flip, False)
         pg.draw.rect(screen, (255, 0, 0), self.rect)
-        screen.blit(self.image, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
+        screen.blit(img, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
 
             
 
