@@ -240,7 +240,7 @@ class Character:
                     self.attack_cooldown = 20
                 elif self.action == 8:
                     self.attacking = False
-                    self.attack_cooldown = 200
+                    self.attack_cooldown = 20
                     self.attack3_cooldown = 150
                 if self.action == 5:
                     self.hit = False
@@ -264,11 +264,10 @@ class Character:
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
             if attacking_rect.colliderect(target.rect):
-                damage = 20 if self.action == 8 else 10
+                damage = 90 if self.action == 8 else 10
                 target.health -= damage
                 target.hit = True 
             pg.draw.rect(screen, (0, 255, 0), attacking_rect)
-
 
     def update_action(self, new_action):
         # sjekker om handlingen har endret seg
@@ -344,7 +343,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 20)
+    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
     return person, boss
     """""
     enemies = []
