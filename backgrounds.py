@@ -15,6 +15,7 @@ sky = pg.image.load("assets/Background/Sky.png").convert_alpha()
 house = pg.image.load("assets/Background/House.png").convert_alpha()
 fuji = pg.image.load("assets/Background/Fuji.png").convert_alpha()
 double_house = pg.image.load("assets/Background/Shrine_Multiple.png").convert_alpha()
+npc = pg.image.load("assets/npc/npc.png").convert_alpha()
 
 
 gras = pg.transform.scale(gras, (1059, 504))
@@ -62,6 +63,7 @@ def draw_fuji(screen, scroll):
 
     if scroll < WIDTH:  
         screen.blit(fuji, (start_x - adjusted_scroll, fuji_y))
+
 
 def draw_house(screen, scroll, world_length):
     house_x = world_length - WIDTH - 1720 
