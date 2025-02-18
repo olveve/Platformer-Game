@@ -126,8 +126,10 @@ class Character:
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
 
-            # Oppdatere rektangelet basert på fiendens posisjon
+            # Oppdatere rektangelet basert på objektenes posisjon
             self.rect.topleft = (self.x, self.y)
+            if self.flip:
+                self.rect.x = (self.x - 48)
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
 
