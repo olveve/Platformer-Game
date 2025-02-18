@@ -27,8 +27,8 @@ class Character:
         self.attack_type = 0
         self.attack_cooldown = 0
         self.hit = False
-        self.alive = True
         self.health = health
+        self.alive = True
         self.char_type = char_type
         self.world_length = world_length
 
@@ -174,7 +174,7 @@ class Character:
             self.health = 0
             self.alive = False
             self.update_action(4) # Dead
-        if self.hit == True:
+        elif self.hit == True:
             self.update_action(5) # Hit
         elif self.attacking == True:
             if self.attack_type == 1:
@@ -223,10 +223,11 @@ class Character:
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
 
-            if attacking_rect.colliderect(target.rect):#self.x + self.rect.width > target.x and self.x < target.x + target.rect.width:
+            if attacking_rect.colliderect(target.rect): #self.x + self.rect.width > target.x and self.x < target.x + target.rect.width:
                 if self.attacking == True:
                     target.health -= 10
                     target.hit = True
+
             pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
     def update_action(self, new_action):
