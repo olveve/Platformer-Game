@@ -70,7 +70,8 @@ class Character:
                 if self.attacking == False:
                     #movement
                     if keys_pressed[pg.K_a]:
-                        self.x -= (self.vx/3)
+                        self.x = int(self.x - (self.vx / 3))
+
                         self.walking = True
                         self.flip = True
                     if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
@@ -78,11 +79,12 @@ class Character:
                         self.running = True
                         self.flip = True
                     if keys_pressed[pg.K_d]:
-                        self.x += (self.vx/3)
+                        self.x = int(self.x - (self.vx / 3))
+
                         self.walking = True
                         self.flip = False
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
-                        self.x += self.vx
+                        self.x = int(self.x - self.vx)
                         self.running = True
                     #Hoppe
                     if keys_pressed[pg.K_w]:
@@ -129,13 +131,17 @@ class Character:
                     self.x = self.world_length - self.rect.width
 
             # Oppdatere rektangelet basert på objektenes posisjon
-            self.rect.topleft = (self.x, self.y)
+            self.rect.topleft = (int(self.x), int(self.y))
             if self.flip:
-                self.rect.x = (self.x - 48)
+                self.rect.left -= 20
+            print(self.x, self.rect.x, self.flip)
+
+
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
         if self.attack3_cooldown > 0:
             self.attack3_cooldown -= 1
+
 
         """""
         if self.char_type == "enemy":
@@ -275,10 +281,18 @@ class Character:
 
     def draw(self, screen):
         img = pg.transform.flip(self.image, self.flip, False)
-        pg.draw.rect(screen, (255, 0, 0), self.rect)
-        screen.blit(img, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
+        # justere posisjonen av bildet basert på flip
+        if self.flip:
+            img_x = self.rect.x - (img.get_width() - self.rect.width) // 2 - 23
+        else:
+            img_x = self.rect.x - (self.image_scale * self.offset[0])
+        img_y = self.rect.y - (self.image_scale * self.offset[1])
+    
+        screen.blit(img, (img_x, img_y))
+        pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
-            
+
+                
 
 """""
 class Enemy(Character):
