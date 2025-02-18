@@ -4,11 +4,11 @@ from assets import *
 from backgrounds import samurai_sheet, boss_sheet
 
 class Character:
-    def __init__(self, x, y, vx, flip, data, sprite_sheet, animation_steps, char_type, world_length, health):
-        self.x = x
-        self.y = y
+    def __init__(self, flip, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length, health):
         self.vx = vx
         self.flip = flip
+        self.x = x 
+        self.y = y
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -329,8 +329,8 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(400, 100, 5, False, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 20)
+    person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
+    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 20)
     return person, boss
     """""
     enemies = []
