@@ -26,6 +26,7 @@ class Character:
         self.rect = pg.Rect(x, y, 15*SAMURAI_SCALE, 25*SAMURAI_SCALE)
         self.attack_type = 0
         self.attack_cooldown = 0
+        self.attack3_cooldown = 0
         self.hit = False
         self.health = health
         self.alive = True
@@ -132,6 +133,8 @@ class Character:
                 self.rect.x = (self.x - 48)
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
+        if self.attack3_cooldown > 0:
+            self.attack3_cooldown -= 1
 
         """""
         if self.char_type == "enemy":
@@ -213,7 +216,8 @@ class Character:
                 self.attack_cooldown = 20
             elif self.action == 8:
                 self.attacking = False
-                self.attack_cooldown = 150
+                self.attack_cooldown = 20
+                self.attack3_cooldown = 150
             if self.action == 5:
                 self.hit = False
                 self.attacking = False
@@ -222,15 +226,16 @@ class Character:
 
     def attack(self, screen, target):
         if self.attack_cooldown == 0:
+            if self.action == 8 and self.attack3_cooldown > 0:
+                return  # Avbryt angrepet hvis attack3_cooldown ikke er null
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
-
-            if attacking_rect.colliderect(target.rect): #self.x + self.rect.width > target.x and self.x < target.x + target.rect.width:
-                if self.attacking == True:
-                    target.health -= 10
-                    target.hit = True
-
+            if attacking_rect.colliderect(target.rect):
+                damage = 20 if self.action == 8 else 10
+                target.health -= damage
+                target.hit = True 
             pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+
 
     def update_action(self, new_action):
         # sjekker om handlingen har endret seg
@@ -298,7 +303,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 10)
+    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 20)
     return person, boss
     """""
     enemies = []
