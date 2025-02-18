@@ -87,12 +87,14 @@ class Character:
                             self.vy = -22
                             self.jumping = True
                     #angrep
-                    if keys_pressed[pg.K_l] or keys_pressed[pg.K_k]:
+                    if keys_pressed[pg.K_l] or keys_pressed[pg.K_k] or keys_pressed[pg.K_p]:
                         self.attack(screen, target)
                         if keys_pressed[pg.K_l]:
                             self.attack_type = 1
                         if keys_pressed[pg.K_k]:
                             self.attack_type = 2
+                        if keys_pressed[pg.K_p]:
+                            self.attack_type = 3
 
             if self.char_type == "boss":
                 distance_to_person = abs(self.x - target.x)
@@ -204,9 +206,12 @@ class Character:
             else:
                 self.frame_index = 0
             # Sjekker om noen har angrepet
-            if self.action == 6 or self.action == 7 or self.action == 8:
+            if self.action == 6 or self.action == 7:
                 self.attacking = False
                 self.attack_cooldown = 20
+            elif self.action == 8:
+                self.attacking = False
+                self.attack_cooldown = 150
             if self.action == 5:
                 self.hit = False
                 self.attacking = False
@@ -217,9 +222,11 @@ class Character:
         if self.attack_cooldown == 0:
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
-            if attacking_rect.colliderect(target.rect):
-                target.health -= 10
-                target.hit = True
+
+            if attacking_rect.colliderect(target.rect):#self.x + self.rect.width > target.x and self.x < target.x + target.rect.width:
+                if self.attacking == True:
+                    target.health -= 10
+                    target.hit = True
             pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
     def update_action(self, new_action):
