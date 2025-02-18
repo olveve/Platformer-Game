@@ -75,3 +75,4 @@ def draw_house(screen, scroll, world_length):
     if scroll > world_length - WIDTH - WIDTH:
         screen.blit(double_house, (house_x - adjusted_scroll + 400, house_y ))  
         screen.blit(house, (house_x - adjusted_scroll, house_y))
+
