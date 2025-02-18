@@ -31,6 +31,7 @@ fuji = pg.transform.scale(fuji, (1059, 700))
 
 # laste spritesheet
 samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
+boss_sheet = pg.image.load("assets/boss/demon.png").convert_alpha()
 
 
 
