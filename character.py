@@ -7,7 +7,7 @@ class Character:
     def __init__(self, flip, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length, health):
         self.vx = vx
         self.flip = flip
-        self.x = x 
+        self.x = x
         self.y = y
         self.size = data[0]
         self.image_scale = data[1]
