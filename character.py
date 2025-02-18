@@ -240,7 +240,7 @@ class Character:
                     self.attack_cooldown = 20
                 elif self.action == 8:
                     self.attacking = False
-                    self.attack_cooldown = 20
+                    self.attack_cooldown = 200
                     self.attack3_cooldown = 150
                 if self.action == 5:
                     self.hit = False
