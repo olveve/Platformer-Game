@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet, boss_sheet
+from backgrounds import samurai_sheet, boss_sheet, npc_sheet
 
 class Character:
     def __init__(self, flip, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length, health):
@@ -51,8 +51,9 @@ class Character:
 
 
     def movement(self, scroll, scrolling, target, screen):
-        self.vy += GRAVITY
-        self.y += self.vy
+        if self.char_type != "npc":  # Kun spilleren og fiender blir påvirket
+            self.vy += GRAVITY
+            self.y += self.vy
         self.running = False
         self.walking = False
         self.attack_type = 0
@@ -129,6 +130,9 @@ class Character:
                     self.x = 0
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
+                    
+            if self.char_type == "npc":
+                return
 
             # Oppdatere rektangelet basert på objektenes posisjon
             self.rect.topleft = (int(self.x), int(self.y))
@@ -140,6 +144,7 @@ class Character:
             self.attack_cooldown -= 1
         if self.attack3_cooldown > 0:
             self.attack3_cooldown -= 1
+
 
 
         """""
@@ -296,8 +301,11 @@ class Character:
         else:
             img_x = self.rect.x - (self.image_scale * self.offset[0])
         img_y = self.rect.y - (self.image_scale * self.offset[1])
-    
-        screen.blit(img, (img_x, img_y))
+
+        if self.char_type == "npc":
+            screen.blit(img, (self.x, self.y))
+        else:   
+            screen.blit(img, (img_x, img_y))
         pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
 
@@ -354,7 +362,9 @@ class Enemy(Character):
 def create_characters(world_length):
     person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
     boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
-    return person, boss
+    npc = Character(False, 100, 360, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, "npc",  world_length, 100)
+    return person, boss, npc
+
     """""
     enemies = []
     for i in range(5):

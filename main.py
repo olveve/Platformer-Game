@@ -12,7 +12,7 @@ from character import create_characters
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person, boss = create_characters(world_length)
+person, boss, npc = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -25,7 +25,8 @@ def health_bar(health, x, y,):
     pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio_person, 30))
 
 # Reell posisjon i verden
-person.world_x = person.x  
+person.world_x = person.x 
+npc.world_x = npc.x 
 
 running = True
 while running:
@@ -48,6 +49,11 @@ while running:
     person.movement(scroll, scrolling, boss, screen)
     person.update()
     person.draw(screen)
+    npc.movement(scroll, scrolling, person, screen)  # Bevegelseslogikk
+    npc.update()  
+    npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
+    npc.draw(screen)  # Tegn NPC-en på riktig sted
+
     
 
     if keys[pg.K_d]:

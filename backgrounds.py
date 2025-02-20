@@ -32,8 +32,7 @@ fuji = pg.transform.scale(fuji, (1059, 700))
 # laste spritesheet
 samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
 boss_sheet = pg.image.load("assets/boss/demon.png").convert_alpha()
-
-
+npc_sheet = pg.image.load("assets/npc/npc_spritesheet.png").convert_alpha()
 
 def draw_bg_base(screen, scroll):
     width = sky.get_width()
