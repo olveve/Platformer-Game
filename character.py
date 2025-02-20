@@ -4,9 +4,10 @@ from assets import *
 from backgrounds import samurai_sheet, boss_sheet
 
 class Character:
-    def __init__(self, flip, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length, health):
+    def __init__(self, flip, char_type, x, y, vx, data, sprite_sheet, animation_steps, world_length, health):
         self.vx = vx
         self.flip = flip
+        self.char_type = char_type
         self.x = x
         self.y = y
         self.size = data[0]
@@ -29,7 +30,6 @@ class Character:
         self.hit = False
         self.health = health
         self.alive = True
-        self.char_type = char_type
         self.scalex = 15*SAMURAI_SCALE if self.char_type == "samurai" else 70*BOSS_SCALE
         self.scaley = 25*SAMURAI_SCALE if self.char_type == "samurai" else 75*BOSS_SCALE
         self.rect = pg.Rect(x, y, self.scalex, self.scaley)
@@ -110,6 +110,9 @@ class Character:
                     if self.x > target.x:
                         self.x -= self.vx
                         self.flip = False
+
+                if self.rect.colliderect(target.rect):
+                    self.attack(screen, target)
                 """""
                 else:
                     try:
@@ -307,8 +310,8 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(False, 600, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
+    person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
+    boss = Character(False, "boss", 600, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
     return person, boss
 
 #person, world_length

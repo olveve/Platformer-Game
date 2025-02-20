@@ -107,7 +107,6 @@ while running:
     boss.movement(person, screen)
     boss.update()
     boss.draw(screen)
-    boss.attack(screen, person)
 
     """""
     if enemies:
