@@ -57,7 +57,7 @@ class Character:
         self.walking = False
         self.attack_type = 0
         
-        if self.attacking == False and self.alive == True:
+        if self.alive == True:
 
             if self.char_type == "samurai":
                 if self.y > HEIGHT - (self.rect.height + 67):
@@ -136,6 +136,10 @@ class Character:
                 self.rect.left -= 20
 
 
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+        if self.attack3_cooldown > 0:
+            self.attack3_cooldown -= 1
 
 
         """""
@@ -176,6 +180,10 @@ class Character:
 
 
     def update(self):
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+        if self.attack3_cooldown > 0:
+            self.attack3_cooldown -= 1
         # sjekker hva personen gjør eks: løper eller idle
         if self.char_type == "samurai":
             if self.health <= 0:
@@ -235,7 +243,7 @@ class Character:
                     self.attack_cooldown = 3
                 elif self.action == 8:
                     self.attacking = False
-                    self.attack_cooldown = 3
+                    self.attack_cooldown = 20
                     self.attack3_cooldown = 150
                 if self.action == 5:
                     self.hit = False
