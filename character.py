@@ -50,7 +50,7 @@ class Character:
         return animation_list
 
 
-    def movement(self, scroll, scrolling, target, screen):
+    def movement(self, target, screen):
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
@@ -110,11 +110,13 @@ class Character:
                     if self.x > target.x:
                         self.x -= self.vx
                         self.flip = False
+                """""
                 else:
                     try:
                         self.x += int(scroll) # Adjust enemy position based on scroll
                     except ValueError:
                         pass
+                """
 
                 # Ensure the enemy doesn't move beyond the world boundaries
                 if self.x < 0:
@@ -202,24 +204,35 @@ class Character:
             if self.char_type == "boss":
                 if self.action == 2:
                     self.attacking = False
-                    self.attack_cooldown = 20
+                    self.attack_cooldown = 60
                 if self.action == 3:
                     self.hit = False
                     self.attacking = False
-                    self.attack_cooldown = 20
+                    self.attack_cooldown = 60
 
 
     def attack(self, screen, target):
-        if self.attack_cooldown == 0:
-            if self.action == 8 and self.attack3_cooldown > 0:
-                return  # Avbryt angrepet hvis attack3_cooldown ikke er null
-            self.attacking = True
-            attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
-            if attacking_rect.colliderect(target.rect):
-                damage = 90 if self.action == 8 else 10
-                target.health -= damage
-                target.hit = True 
-            pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+        if self.char_type == "samurai":
+            if self.attack_cooldown == 0:
+                if self.action == 8 and self.attack3_cooldown > 0:
+                    return  # Avbryt angrepet hvis attack3_cooldown ikke er null
+                self.attacking = True
+                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
+                if attacking_rect.colliderect(target.rect):
+                    damage = 90 if self.action == 8 else 10
+                    target.health -= damage
+                    target.hit = True 
+                pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+        if self.char_type == "boss":
+            if self.attack_cooldown == 0:
+                self.attacking = True
+                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
+                if attacking_rect.colliderect(target.rect):
+                    damage = 10
+                    target.health -= damage
+                    target.hit = True
+                pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+
 
     def update_action(self, new_action):
         # sjekker om handlingen har endret seg

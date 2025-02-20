@@ -19,7 +19,7 @@ scroll_threshold = 200
 
 # health bar
 def health_bar(health, x, y,):
-    ratio_person = health / person.health
+    ratio_person = health / 100
     pg.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
     pg.draw.rect(screen, RED, (x, y, 400, 30))
     pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio_person, 30))
@@ -101,13 +101,13 @@ while running:
     elif scrolling == "L":
         speed = person.vx * boss_factor
 
-    person.movement(scroll, scrolling, boss, screen)
+    person.movement(boss, screen)
     person.update()
     person.draw(screen)
-    boss.movement(scrolling, speed, person, screen)
+    boss.movement(person, screen)
     boss.update()
     boss.draw(screen)
-   
+    boss.attack(screen, person)
 
     """""
     if enemies:
