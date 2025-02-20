@@ -55,15 +55,13 @@ class Character:
         self.y += self.vy
         self.running = False
         self.walking = False
-        self.attack_type = 0
         
         if self.alive == True:
-
-            if self.char_type == "samurai":
-                if self.y > HEIGHT - (self.rect.height + 67):
+            if self.y > HEIGHT - (self.rect.height + 67):
                     self.y = HEIGHT - (self.rect.height + 67)
                     self.vy = 0
                     self.jumping = False
+            if self.char_type == "samurai":
 
                 keys_pressed = pg.key.get_pressed()
                 #Kan bare gjøre andre ting om jeg ikke agriper
@@ -71,7 +69,6 @@ class Character:
                     #movement
                     if keys_pressed[pg.K_a]:
                         self.x = int(self.x - (self.vx / 3))
-
                         self.walking = True
                         self.flip = True
                     if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
@@ -80,7 +77,6 @@ class Character:
                         self.flip = True
                     if keys_pressed[pg.K_d]:
                         self.x = int(self.x - (self.vx / 3))
-
                         self.walking = True
                         self.flip = False
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
@@ -96,28 +92,24 @@ class Character:
                         self.attack(screen, target)
                         if keys_pressed[pg.K_l]:
                             self.attack_type = 1
-                        if keys_pressed[pg.K_k]:
+                        elif keys_pressed[pg.K_k]:
                             self.attack_type = 2
-                        if keys_pressed[pg.K_p]:
+                        elif keys_pressed[pg.K_p]:
                             self.attack_type = 3
 
             if self.char_type == "boss":
-                if self.y > HEIGHT - (self.rect.height + 67):
-                    self.y = HEIGHT - (self.rect.height + 67)
-                    self.vy = 0
-
                 distance_to_person = abs(self.x - target.x)
-                if not scrolling:
-                    if distance_to_person <= 300:
-                        self.following = True
-                    if self.following:
-                        if self.x < target.x:
-                            self.x += self.vx
-                        if self.x > target.x:
-                            self.x -= self.vx
-
-                #elif scrolling and distance_to_person <= WIDTH:
-                #   self.vx = 0
+                #if not scrolling:
+                if distance_to_person <= 300:
+                    self.following = True
+                    self.walking = True
+                if self.following:
+                    if self.x < target.x:
+                        self.x += self.vx
+                        self.flip = True
+                    if self.x > target.x:
+                        self.x -= self.vx
+                        self.flip = False
                 else:
                     try:
                         self.x += int(scroll) # Adjust enemy position based on scroll
@@ -134,44 +126,6 @@ class Character:
             self.rect.topleft = (int(self.x), int(self.y))
             if self.flip:
                 self.rect.left -= 20
-            print(self.x, self.rect.x, self.flip)
-
-
-        """""
-        if self.char_type == "enemy":
-            distance_to_person = abs(self.x - target.x)
-
-            if self.y > HEIGHT - (self.rect.height + 67):
-                self.y = HEIGHT - (self.rect.height + 67)
-                self.vy = 0
-
-            if not scrolling:
-                if distance_to_person <= 300:
-                    self.following = True
-                if self.following:
-                    if self.x < target.x:
-                        self.x += self.vx
-                    if self.x > target.x:
-                        self.x -= self.vx
-        
-
-            #elif scrolling and distance_to_person <= WIDTH:
-            #   self.vx = 0
-            else:
-                try:
-                    self.x += int(scroll) # Adjust enemy position based on scroll
-                except ValueError:
-                    pass
-
-            # Ensure the enemy doesn't move beyond the world boundaries
-            if self.x < 0:
-                self.x = 0
-            if self.x > self.world_length - self.rect.width:
-                self.x = self.world_length - self.rect.width
-
-            # Oppdatere rektangelet basert på fiendens posisjon
-            self.rect.topleft = (self.x, self.y)
-            """
 
 
     def update(self):
@@ -341,14 +295,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
+    boss = Character(False, 600, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
     return person, boss
-    """""
-    enemies = []
-    for i in range(5):
-        enemy = Character(500 * i + 800, 100, 2, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
-        enemies.append(enemy)
-    return person, enemies
-    """
 
 #person, world_length
