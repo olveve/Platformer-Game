@@ -50,7 +50,7 @@ class Character:
         return animation_list
 
 
-    def movement(self, target, screen):
+    def movement(self, scrolling, scroll, target, screen):
         self.vy += GRAVITY
         self.y += self.vy
         self.running = False
@@ -102,14 +102,17 @@ class Character:
                 #if not scrolling:
                 if distance_to_person <= 300:
                     self.following = True
-                    self.walking = True
                 if self.following:
-                    if self.x < target.x:
-                        self.x += self.vx
-                        self.flip = True
-                    if self.x > target.x:
-                        self.x -= self.vx
-                        self.flip = False
+                    self.walking = True
+                    if not scrolling:
+                        if self.x < target.x:
+                            self.x += self.vx
+                            self.flip = True
+                        if self.x > target.x:
+                            self.x -= self.vx
+                            self.flip = False
+                    else: 
+                        self.x += int(scroll)
 
                 if self.rect.colliderect(target.rect):
                     self.attack(screen, target)

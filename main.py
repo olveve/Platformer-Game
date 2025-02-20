@@ -101,10 +101,10 @@ while running:
     elif scrolling == "L":
         speed = person.vx * boss_factor
 
-    person.movement(boss, screen)
+    person.movement(scrolling, scroll, boss,screen)
     person.update()
     person.draw(screen)
-    boss.movement(person, screen)
+    boss.movement(scrolling, speed, person, screen)
     boss.update()
     boss.draw(screen)
 
