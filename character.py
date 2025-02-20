@@ -114,8 +114,8 @@ class Character:
                     else: 
                         self.x += int(scroll)
 
-                if self.rect.colliderect(target.rect):
-                    self.attack(screen, target)
+                # if self.rect.colliderect(target.rect):
+                #     self.attack(screen, target)
                 """""
                 else:
                     try:

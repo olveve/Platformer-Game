@@ -98,8 +98,10 @@ while running:
     speed = -person.vx
     if scrolling == "R":
         speed = -person.vx * boss_factor
+        boss.flip = True
     elif scrolling == "L":
         speed = person.vx * boss_factor
+        boss.flip = False
 
     person.movement(scrolling, scroll, boss,screen)
     person.update()
