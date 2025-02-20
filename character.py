@@ -134,12 +134,7 @@ class Character:
             self.rect.topleft = (int(self.x), int(self.y))
             if self.flip:
                 self.rect.left -= 20
-
-
-        if self.attack_cooldown > 0:
-            self.attack_cooldown -= 1
-        if self.attack3_cooldown > 0:
-            self.attack3_cooldown -= 1
+            print(self.x, self.rect.x, self.flip)
 
 
         """""
@@ -240,37 +235,30 @@ class Character:
             if self.char_type == "samurai":
                 if self.action == 6 or self.action == 7:
                     self.attacking = False
-                    self.attack_cooldown = 3
+                    self.attack_cooldown = 20
                 elif self.action == 8:
                     self.attacking = False
-                    self.attack_cooldown = 20
+                    self.attack_cooldown = 100
                     self.attack3_cooldown = 150
                 if self.action == 5:
                     self.hit = False
                     self.attacking = False
-                    self.attack_cooldown = 3
+                    self.attack_cooldown = 20
 
             if self.char_type == "boss":
                 if self.action == 2:
                     self.attacking = False
-                    self.attack_cooldown = 3
+                    self.attack_cooldown = 20
                 if self.action == 3:
                     self.hit = False
                     self.attacking = False
-                    self.attack_cooldown = 3
+                    self.attack_cooldown = 20
 
-            if self.attack_cooldown > 0:
-                self.attack_cooldown -= 1
-            if self.attack3_cooldown > 0:
-                self.attack3_cooldown -= 1
-            print(f"Attack 3: {self.attack3_cooldown} Attack: {self.attack_cooldown}")
-        
+
     def attack(self, screen, target):
-        if self.attack_type == 3 and self.attack3_cooldown > 0:
-            return
-        else:
-            if self.attack_cooldown > 0:
-                return
+        if self.attack_cooldown == 0:
+            if self.action == 8 and self.attack3_cooldown > 0:
+                return  # Avbryt angrepet hvis attack3_cooldown ikke er null
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
             if attacking_rect.colliderect(target.rect):
