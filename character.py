@@ -314,4 +314,12 @@ def create_characters(world_length):
     boss = Character(False, "boss", 600, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
     return person, boss
 
+    """""
+    enemies = []
+    for i in range(5):
+        enemy = Character(500 * i + 800, 100, 2, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
+        enemies.append(enemy)
+    return person, enemies
+    """
+
 #person, world_length
