@@ -19,7 +19,7 @@ scroll_threshold = 200
 
 # health bar
 def health_bar(health, x, y,):
-    ratio_person = health / person.health
+    ratio_person = health / 100
     pg.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
     pg.draw.rect(screen, RED, (x, y, 400, 30))
     pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio_person, 30))
@@ -38,7 +38,6 @@ while running:
     clock.tick(FPS)
     keys = pg.key.get_pressed()
     scrolling = ""  # for scroll retningen
-    
 
     draw_bg_base(screen, scroll)
     draw_fuji(screen, scroll)
@@ -46,6 +45,7 @@ while running:
     draw_fg(screen, scroll)
     health_bar(person.health, 20, 20)
     health_bar(boss.health, 630, 20)
+
     person.movement(scroll, scrolling, boss, screen)
     person.update()
     person.draw(screen)
@@ -57,7 +57,6 @@ while running:
     if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
         screen.blit(rules_img, rules_rect)
 
-    
 
     if keys[pg.K_d]:
         if person.world_x + person.vx <= world_length - person.rect.width:
@@ -104,16 +103,6 @@ while running:
 
     person.x = person.world_x - scroll
 
-    """""
-    # KAN MULIG FJERNES: siden vi har world.x nå
-    if person.x < 0:
-        person.x = 0
-    if person.x > world_length - person.rect.width:
-        person.x = world_length - person.rect.width
-    """
-
-    
-    
     if boss:
         boss_factor = boss.vx / person.vx
     else:
@@ -122,9 +111,11 @@ while running:
     speed = -person.vx
     if scrolling == "R":
         speed = -person.vx * boss_factor
+        boss.flip = True
     elif scrolling == "L":
         speed = person.vx * boss_factor
-    
+        boss.flip = False
+
     boss.movement(scrolling, speed, person, screen)
     boss.update()
     boss.draw(screen)
