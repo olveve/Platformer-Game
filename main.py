@@ -45,14 +45,6 @@ while running:
     draw_fg(screen, scroll)
     health_bar(person.health, 20, 20)
     health_bar(boss.health, 630, 20)
-
-    person.movement(scroll, scrolling, boss, screen)
-    person.update()
-    person.draw(screen)
-    npc.movement(scroll, scrolling, person, screen)  # Bevegelseslogikk
-    npc.update()  
-    npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
-    npc.draw(screen)  # Tegn NPC-en på riktig sted
     
     if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
         screen.blit(rules_img, rules_rect)
@@ -116,6 +108,15 @@ while running:
         speed = person.vx * boss_factor
         boss.flip = False
 
+
+    
+    person.movement(scroll, scrolling, boss, screen)
+    person.update()
+    person.draw(screen)
+    npc.movement(scroll, scrolling, person, screen)  # Bevegelseslogikk
+    npc.update()  
+    npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
+    npc.draw(screen)  # Tegn NPC-en på riktig sted
     boss.movement(scrolling, speed, person, screen)
     boss.update()
     boss.draw(screen)
