@@ -113,6 +113,11 @@ class Character:
                             self.flip = False
                     else: 
                         self.x += 0
+
+            if self.char_type == "boss" and self.alive and self.attack_cooldown == 0:
+                distance_to_target = abs(self.x - target.x)
+                if distance_to_target < 100:  # Bossen angriper bare når spilleren er nærme
+                    self.attack(screen, target)
                 """""
                 else:
                     try:
@@ -207,20 +212,39 @@ class Character:
             if self.char_type == "boss":
                 if self.action == 2:
                     self.attacking = False
-                    self.attack_cooldown = 60
+                    self.attack_cooldown = 150
                 if self.action == 3:
                     self.hit = False
                     self.attacking = False
-                    self.attack_cooldown = 60
+                    self.attack_cooldown = 150
 
 
     def attack(self, screen, target):
-        if self.char_type == "samurai":
+        #if self.char_type == "samurai":
             if self.attack_cooldown == 0:
-                if self.action == 8 and self.attack3_cooldown > 0:
-                    return  # Avbryt angrepet hvis attack3_cooldown ikke er null
+                """ if self.action == 8 and self.attack3_cooldown > 0:
+                    return  # Avbryt angrepet hvis attack3_cooldown ikke er null """
                 self.attacking = True
-                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
+                attack_width = self.rect.width  # Angrepsområdet
+                if self.char_type == "samurai":
+                    # Samurai ser mot høyre fra start
+                    attack_x = self.rect.right if not self.flip else self.rect.left - attack_width
+                elif self.char_type == "boss":
+                    # Boss ser mot venstre fra start
+                    attack_x = self.rect.left - attack_width if not self.flip else self.rect.right
+
+                # Opprett angrepsrektangelet
+                attacking_rect = pg.Rect(attack_x, self.rect.y, attack_width, self.rect.height)
+
+                # Sjekk om angrepet treffer målet
+                if attacking_rect.colliderect(target.rect):
+                    damage = 10 if self.char_type == "boss" else (90 if self.action == 8 else 10)
+                    target.health -= damage
+                    target.hit = True
+
+                # Sett cooldown
+                self.attack_cooldown = 150 if self.char_type == "boss" else 20
+                """ attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
                 if attacking_rect.colliderect(target.rect):
                     damage = 90 if self.action == 8 else 10
                     target.health -= damage
@@ -233,7 +257,7 @@ class Character:
                 if attacking_rect.colliderect(target.rect):
                     damage = 10
                     target.health -= damage
-                    target.hit = True
+                    target.hit = True """
                 pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
 
