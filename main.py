@@ -12,7 +12,7 @@ from character import create_characters
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person, boss, npc = create_characters(world_length)
+person, boss, npc, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -120,7 +120,12 @@ while running:
     boss.movement(scrolling, speed, person, screen)
     boss.update()
     boss.draw(screen)
-
+    
+    for enemy in enemies:
+        enemy.movement(scrolling, speed, person, screen)
+        enemy.update()
+        enemy.draw(screen)
+        
     """""
     if enemies:
         enemy_factor = enemies[0].vx / person.vx

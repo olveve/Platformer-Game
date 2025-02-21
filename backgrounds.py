@@ -33,6 +33,7 @@ fuji = pg.transform.scale(fuji, (1059, 700))
 samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha()
 boss_sheet = pg.image.load("assets/boss/demon.png").convert_alpha()
 npc_sheet = pg.image.load("assets/npc/npc_spritesheet.png").convert_alpha()
+enemy_sheet = pg.image.load("assets/enemies/skull_enemy.png").convert_alpha()
 
 rules_img = pg.image.load("assets/rules/rules.png").convert_alpha()
 rules_rect = rules_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
