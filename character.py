@@ -118,9 +118,8 @@ class Character:
 
             if self.char_type == "boss" and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
-                if distance_to_target < 100:
-                    pass  # Bossen angriper bare når spilleren er nærme
-                    #self.attack(screen, target)
+                if distance_to_target < 100: # Bossen angriper bare når spilleren er nærme
+                    self.attack(screen, target)
                 """""
                 else:
                     try:
