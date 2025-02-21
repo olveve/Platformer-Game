@@ -263,7 +263,9 @@ class Character:
                     self.hit = False
                     self.attacking = False
                     self.attack_cooldown = 150
-
+            
+            if self.char_type == "npc":
+                self.rect.topleft = (self.x, self.y)
 
     def attack(self, screen, target):
         #if self.char_type == "samurai":
@@ -326,7 +328,7 @@ class Character:
         img_y = self.rect.y - (self.image_scale * self.offset[1])
 
         if self.char_type == "npc":
-            screen.blit(img, (self.x, self.y))
+            screen.blit(img, (self.x, self.y+65))
         else:   
             screen.blit(img, (img_x, img_y))
         pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
@@ -385,7 +387,7 @@ class Enemy(Character):
 def create_characters(world_length):
     person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
     boss = Character(False, "boss", 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
-    npc = Character(False, "npc", 100, 360, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
+    npc = Character(False, "npc", 100, HEIGHT-100, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
     return person, boss, npc
 
     """""
