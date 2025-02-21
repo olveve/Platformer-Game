@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet, boss_sheet
+from backgrounds import samurai_sheet, boss_sheet, npc_sheet
 
 class Character:
     def __init__(self, flip, char_type, x, y, vx, data, sprite_sheet, animation_steps, world_length, health):
@@ -50,9 +50,11 @@ class Character:
         return animation_list
 
 
-    def movement(self, scrolling, scroll, target, screen):
-        self.vy += GRAVITY
-        self.y += self.vy
+
+    def movement(self, scroll, scrolling, target, screen):
+        if self.char_type != "npc":  # Kun spilleren og fiender blir påvirket
+            self.vy += GRAVITY
+            self.y += self.vy
         self.running = False
         self.walking = False
         
@@ -131,12 +133,56 @@ class Character:
                     self.x = 0
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
+                    
+            if self.char_type == "npc":
+                return
 
             # Oppdatere rektangelet basert på objektenes posisjon
             self.rect.topleft = (int(self.x), int(self.y))
             if self.flip:
                 self.rect.left -= 20
 
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+        if self.attack3_cooldown > 0:
+            self.attack3_cooldown -= 1
+
+            
+        """""
+        if self.char_type == "enemy":
+            distance_to_person = abs(self.x - target.x)
+
+            if self.y > HEIGHT - (self.rect.height + 67):
+                self.y = HEIGHT - (self.rect.height + 67)
+                self.vy = 0
+
+            if not scrolling:
+                if distance_to_person <= 300:
+                    self.following = True
+                if self.following:
+                    if self.x < target.x:
+                        self.x += self.vx
+                    if self.x > target.x:
+                        self.x -= self.vx
+        
+
+            #elif scrolling and distance_to_person <= WIDTH:
+            #   self.vx = 0
+            else:
+                try:
+                    self.x += int(scroll) # Adjust enemy position based on scroll
+                except ValueError:
+                    pass
+
+            # Ensure the enemy doesn't move beyond the world boundaries
+            if self.x < 0:
+                self.x = 0
+            if self.x > self.world_length - self.rect.width:
+                self.x = self.world_length - self.rect.width
+
+            # Oppdatere rektangelet basert på fiendens posisjon
+            self.rect.topleft = (self.x, self.y)
+            """
 
     def update(self):
         if self.attack_cooldown > 0:
@@ -278,8 +324,11 @@ class Character:
         else:
             img_x = self.rect.x - (self.image_scale * self.offset[0])
         img_y = self.rect.y - (self.image_scale * self.offset[1])
-    
-        screen.blit(img, (img_x, img_y))
+
+        if self.char_type == "npc":
+            screen.blit(img, (self.x, self.y))
+        else:   
+            screen.blit(img, (img_x, img_y))
         pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
 
@@ -334,9 +383,10 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
-    boss = Character(False, "boss", 600, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
-    return person, boss
+    person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
+    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
+    npc = Character(False, 100, 360, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, "npc",  world_length, 100)
+    return person, boss, npc
 
     """""
     enemies = []

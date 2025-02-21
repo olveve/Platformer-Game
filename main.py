@@ -6,13 +6,13 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
 
-from backgrounds import draw_bg_base, draw_fg, draw_fuji, draw_house
+from backgrounds import draw_bg_base, draw_fg, draw_fuji, draw_house, rules_img, rules_rect
 from character import create_characters
 
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person, boss = create_characters(world_length)
+person, boss, npc = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
@@ -25,7 +25,8 @@ def health_bar(health, x, y,):
     pg.draw.rect(screen, YELLOW, (x, y, 400 * ratio_person, 30))
 
 # Reell posisjon i verden
-person.world_x = person.x  
+person.world_x = person.x 
+npc.world_x = npc.x 
 
 running = True
 while running:
@@ -44,6 +45,18 @@ while running:
     draw_fg(screen, scroll)
     health_bar(person.health, 20, 20)
     health_bar(boss.health, 630, 20)
+
+    person.movement(scroll, scrolling, boss, screen)
+    person.update()
+    person.draw(screen)
+    npc.movement(scroll, scrolling, person, screen)  # Bevegelseslogikk
+    npc.update()  
+    npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
+    npc.draw(screen)  # Tegn NPC-en på riktig sted
+    
+    if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
+        screen.blit(rules_img, rules_rect)
+
 
     if keys[pg.K_d]:
         if person.world_x + person.vx <= world_length - person.rect.width:
@@ -103,9 +116,6 @@ while running:
         speed = person.vx * boss_factor
         boss.flip = False
 
-    person.movement(scrolling, scroll, boss,screen)
-    person.update()
-    person.draw(screen)
     boss.movement(scrolling, speed, person, screen)
     boss.update()
     boss.draw(screen)
