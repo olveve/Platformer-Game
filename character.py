@@ -60,9 +60,9 @@ class Character:
         
         if self.alive == True:
             if self.y > HEIGHT - (self.rect.height + 67):
-                    self.y = HEIGHT - (self.rect.height + 67)
-                    self.vy = 0
-                    self.jumping = False
+                self.y = HEIGHT - (self.rect.height + 67)
+                self.vy = 0
+                self.jumping = False
             if self.char_type == "samurai":
 
                 keys_pressed = pg.key.get_pressed()
@@ -386,7 +386,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
-    boss = Character(False, "boss", 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
+    boss = Character(False, "boss", 400, 100, 3, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
     npc = Character(False, "npc", 100, HEIGHT-100, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
     return person, boss, npc
 
