@@ -113,9 +113,6 @@ class Character:
                             self.flip = False
                     else: 
                         self.x += int(scroll)
-
-                # if self.rect.colliderect(target.rect):
-                #     self.attack(screen, target)
                 """""
                 else:
                     try:
@@ -232,7 +229,7 @@ class Character:
         if self.char_type == "boss":
             if self.attack_cooldown == 0:
                 self.attacking = True
-                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
+                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, -(2*self.rect.width), self.rect.height)
                 if attacking_rect.colliderect(target.rect):
                     damage = 10
                     target.health -= damage
