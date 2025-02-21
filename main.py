@@ -6,7 +6,7 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Runner")
 
-from backgrounds import draw_bg_base, draw_fg, draw_fuji, draw_house
+from backgrounds import draw_bg_base, draw_fg, draw_fuji, draw_house, rules_img, rules_rect
 from character import create_characters
 
 
@@ -53,6 +53,9 @@ while running:
     npc.update()  
     npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
     npc.draw(screen)  # Tegn NPC-en på riktig sted
+    
+    if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
+        screen.blit(rules_img, rules_rect)
 
     
 

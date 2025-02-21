@@ -34,6 +34,9 @@ samurai_sheet = pg.image.load("assets/mainCharacter/Samurai.png").convert_alpha(
 boss_sheet = pg.image.load("assets/boss/demon.png").convert_alpha()
 npc_sheet = pg.image.load("assets/npc/npc_spritesheet.png").convert_alpha()
 
+rules_img = pg.image.load("assets/rules/rules.png").convert_alpha()
+rules_rect = rules_img.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
 def draw_bg_base(screen, scroll):
     width = sky.get_width()
     for x in range(5):
