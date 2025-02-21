@@ -1,19 +1,19 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet
+from backgrounds import samurai_sheet, boss_sheet, npc_sheet
 
 class Character:
-    def __init__(self, x, y, vx, flip, data, sprite_sheet, animation_steps, char_type, world_length, health):
-        self.x = x
-        self.y = y
+    def __init__(self, flip, x, y, vx, data, sprite_sheet, animation_steps, char_type, world_length, health):
         self.vx = vx
         self.flip = flip
+        self.x = x
+        self.y = y
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
         self.animation_list = self.load_images(sprite_sheet, animation_steps)
-        self.action = 0 # 0:Idle, 1:walk, 2:Run, 3:Jump, 4:death, 5:hit, 6:Attack, 7:Attack 2, 8:Attack 3
+        self.action = 0 # 0:Idle, 1:walk, 2:Run, 3:Jump, 4:death, 5:hit, 6:Attack, 7:Attack 2, 8:Attack 3    # Demon: 0:idle, 1:walk, 2: attack, 3:hit, 4:death
         self.frame_index = 0
         self.image = self.animation_list[self.action][self.frame_index]
         self.update_time = pg.time.get_ticks() # tidspunktet for når bildet ble oppdatert
@@ -23,7 +23,6 @@ class Character:
         self.jumping = False
         self.attacking = False
         self.following = False
-        self.rect = pg.Rect(x, y, 15*SAMURAI_SCALE, 25*SAMURAI_SCALE)
         self.attack_type = 0
         self.attack_cooldown = 0
         self.attack3_cooldown = 0
@@ -31,6 +30,9 @@ class Character:
         self.health = health
         self.alive = True
         self.char_type = char_type
+        self.scalex = 15*SAMURAI_SCALE if self.char_type == "samurai" else 70*BOSS_SCALE
+        self.scaley = 25*SAMURAI_SCALE if self.char_type == "samurai" else 75*BOSS_SCALE
+        self.rect = pg.Rect(x, y, self.scalex, self.scaley)
         self.world_length = world_length
 
     def load_images(self, sprite_sheet, animation_steps):
@@ -49,26 +51,28 @@ class Character:
 
 
     def movement(self, scroll, scrolling, target, screen):
-        self.vy += GRAVITY
-        self.y += self.vy
+        if self.char_type != "npc":  # Kun spilleren og fiender blir påvirket
+            self.vy += GRAVITY
+            self.y += self.vy
         self.running = False
         self.walking = False
         self.attack_type = 0
-
-        if self.y > HEIGHT - (self.rect.height + 67):
-            self.y = HEIGHT - (self.rect.height + 67)
-            self.vy = 0
-            self.jumping = False
         
-        if self.attacking == False and self.alive == True:
+        if self.alive == True:
 
             if self.char_type == "samurai":
+                if self.y > HEIGHT - (self.rect.height + 67):
+                    self.y = HEIGHT - (self.rect.height + 67)
+                    self.vy = 0
+                    self.jumping = False
+
                 keys_pressed = pg.key.get_pressed()
                 #Kan bare gjøre andre ting om jeg ikke agriper
                 if self.attacking == False:
                     #movement
                     if keys_pressed[pg.K_a]:
-                        self.x -= (self.vx/3)
+                        self.x = int(self.x - (self.vx / 3))
+
                         self.walking = True
                         self.flip = True
                     if keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]:
@@ -76,11 +80,12 @@ class Character:
                         self.running = True
                         self.flip = True
                     if keys_pressed[pg.K_d]:
-                        self.x += (self.vx/3)
+                        self.x = int(self.x - (self.vx / 3))
+
                         self.walking = True
                         self.flip = False
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
-                        self.x += self.vx
+                        self.x = int(self.x - self.vx)
                         self.running = True
                     #Hoppe
                     if keys_pressed[pg.K_w]:
@@ -98,12 +103,11 @@ class Character:
                             self.attack_type = 3
 
             if self.char_type == "boss":
-                distance_to_person = abs(self.x - target.x)
-
                 if self.y > HEIGHT - (self.rect.height + 67):
                     self.y = HEIGHT - (self.rect.height + 67)
                     self.vy = 0
 
+                distance_to_person = abs(self.x - target.x)
                 if not scrolling:
                     if distance_to_person <= 300:
                         self.following = True
@@ -126,15 +130,22 @@ class Character:
                     self.x = 0
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
+                    
+            if self.char_type == "npc":
+                return
 
             # Oppdatere rektangelet basert på objektenes posisjon
-            self.rect.topleft = (self.x, self.y)
+            self.rect.topleft = (int(self.x), int(self.y))
             if self.flip:
-                self.rect.x = (self.x - 48)
+                self.rect.left -= 20
+
+
         if self.attack_cooldown > 0:
             self.attack_cooldown -= 1
         if self.attack3_cooldown > 0:
             self.attack3_cooldown -= 1
+
+
 
         """""
         if self.char_type == "enemy":
@@ -174,28 +185,48 @@ class Character:
 
 
     def update(self):
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+        if self.attack3_cooldown > 0:
+            self.attack3_cooldown -= 1
         # sjekker hva personen gjør eks: løper eller idle
-        if self.health <= 0:
-            self.health = 0
-            self.alive = False
-            self.update_action(4) # Dead
-        elif self.hit == True:
-            self.update_action(5) # Hit
-        elif self.attacking == True:
-            if self.attack_type == 1:
-                self.update_action(6) # Attack 1
-            elif self.attack_type == 2: 
-                self.update_action(7) # Attack 2
-            elif self.attack_type == 3:
-                self.update_action(8) #Attack 3
-        elif self.jumping == True:
-            self.update_action(3) #h Jumping
-        elif self.running == True:
-            self.update_action(2) # Running 
-        elif self.walking == True:
-            self.update_action(1) # Walking
-        else:
-            self.update_action(0) # Idle
+        if self.char_type == "samurai":
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.update_action(4) # Dead
+            elif self.hit == True:
+                self.update_action(5) # Hit
+            elif self.attacking == True:
+                if self.attack_type == 1:
+                    self.update_action(6) # Attack 1
+                elif self.attack_type == 2: 
+                    self.update_action(7) # Attack 2
+                elif self.attack_type == 3:
+                    self.update_action(8) #Attack 3
+            elif self.jumping == True:
+                self.update_action(3) #h Jumping
+            elif self.running == True:
+                self.update_action(2) # Running 
+            elif self.walking == True:
+                self.update_action(1) # Walking
+            else:
+                self.update_action(0) # Idle
+
+        if self.char_type == "boss":
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.update_action(4) # Dead
+            elif self.hit == True:
+                self.update_action(3) # Hit
+            elif self.attacking == True:
+                self.update_action(2) # attack
+            elif self.walking == True:
+                self.update_action(1) # Walking
+            else:
+                self.update_action(0) # Idle
+
 
         animation_cooldown = 100
         # oppdaterer bildet
@@ -211,31 +242,47 @@ class Character:
             else:
                 self.frame_index = 0
             # Sjekker om noen har angrepet
-            if self.action == 6 or self.action == 7:
-                self.attacking = False
-                self.attack_cooldown = 20
-            elif self.action == 8:
-                self.attacking = False
-                self.attack_cooldown = 20
-                self.attack3_cooldown = 150
-            if self.action == 5:
-                self.hit = False
-                self.attacking = False
-                self.attack_cooldown = 20
+            if self.char_type == "samurai":
+                if self.action == 6 or self.action == 7:
+                    self.attacking = False
+                    self.attack_cooldown = 3
+                elif self.action == 8:
+                    self.attacking = False
+                    self.attack_cooldown = 20
+                    self.attack3_cooldown = 150
+                if self.action == 5:
+                    self.hit = False
+                    self.attacking = False
+                    self.attack_cooldown = 3
 
+            if self.char_type == "boss":
+                if self.action == 2:
+                    self.attacking = False
+                    self.attack_cooldown = 3
+                if self.action == 3:
+                    self.hit = False
+                    self.attacking = False
+                    self.attack_cooldown = 3
 
+            if self.attack_cooldown > 0:
+                self.attack_cooldown -= 1
+            if self.attack3_cooldown > 0:
+                self.attack3_cooldown -= 1
+            print(f"Attack 3: {self.attack3_cooldown} Attack: {self.attack_cooldown}")
+        
     def attack(self, screen, target):
-        if self.attack_cooldown == 0:
-            if self.action == 8 and self.attack3_cooldown > 0:
-                return  # Avbryt angrepet hvis attack3_cooldown ikke er null
+        if self.attack_type == 3 and self.attack3_cooldown > 0:
+            return
+        else:
+            if self.attack_cooldown > 0:
+                return
             self.attacking = True
             attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
             if attacking_rect.colliderect(target.rect):
-                damage = 20 if self.action == 8 else 10
+                damage = 90 if self.action == 8 else 10
                 target.health -= damage
                 target.hit = True 
             pg.draw.rect(screen, (0, 255, 0), attacking_rect)
-
 
     def update_action(self, new_action):
         # sjekker om handlingen har endret seg
@@ -248,10 +295,21 @@ class Character:
 
     def draw(self, screen):
         img = pg.transform.flip(self.image, self.flip, False)
-        pg.draw.rect(screen, (255, 0, 0), self.rect)
-        screen.blit(img, (self.rect.x - (self.image_scale * self.offset[0]), self.rect.y - (self.image_scale * self.offset[1])))
+        # justere posisjonen av bildet basert på flip
+        if self.flip:
+            img_x = self.rect.x - (img.get_width() - self.rect.width) // 2 - 23
+        else:
+            img_x = self.rect.x - (self.image_scale * self.offset[0])
+        img_y = self.rect.y - (self.image_scale * self.offset[1])
 
-            
+        if self.char_type == "npc":
+            screen.blit(img, (self.x, self.y))
+        else:   
+            screen.blit(img, (img_x, img_y))
+        pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
+
+
+                
 
 """""
 class Enemy(Character):
@@ -302,9 +360,11 @@ class Enemy(Character):
 
 
 def create_characters(world_length):
-    person = Character(100, 100, 7, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
-    boss = Character(400, 100, 5, True, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "boss", world_length, 20)
-    return person, boss
+    person = Character(False, 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "samurai", world_length, 100)
+    boss = Character(False, 400, 100, 5, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, "boss", world_length, 100)
+    npc = Character(False, 100, 360, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, "npc",  world_length, 100)
+    return person, boss, npc
+
     """""
     enemies = []
     for i in range(5):
