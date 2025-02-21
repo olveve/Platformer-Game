@@ -112,7 +112,7 @@ class Character:
                             self.x -= self.vx
                             self.flip = False
                     else: 
-                        self.x += scroll
+                        self.x += 0
                 """""
                 else:
                     try:
