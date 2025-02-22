@@ -105,11 +105,11 @@ while running:
 
     person.x = person.world_x - scroll
 
-    if boss:
-        boss_factor = boss.vx / person.vx
-    else:
+    #if boss:
+    boss_factor = boss.vx / person.vx
+    """ else:
         boss_factor = 1
-
+ """
     speed = -person.vx
     if scrolling == "R":
         speed = -person.vx * boss_factor
