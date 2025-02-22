@@ -78,6 +78,7 @@ while running:
             scroll = person.world_x - (WIDTH - scroll_threshold)
             bg_scroll = scroll
             scrolling = "R"
+            scrolling = True
 
     if keys[pg.K_a]:
         if person.world_x - person.vx >= 0:
@@ -89,6 +90,7 @@ while running:
             scroll = person.world_x - scroll_threshold
             bg_scroll = scroll
             scrolling = "L"
+            scrolling = True
     
     if keys[pg.K_a] and keys[pg.K_LSHIFT]:
         if person.world_x - person.vx >= 0:
@@ -117,7 +119,7 @@ while running:
         boss.flip = False
 
 
-    boss.movement(scrolling, speed, person, screen)
+    boss.movement(speed, scrolling, person, screen)
     boss.update()
     boss.draw(screen)
 

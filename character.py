@@ -101,10 +101,11 @@ class Character:
 
             if self.char_type == "boss":
                 distance_to_person = abs(self.x - target.x)
-                if not scrolling:
-                    if distance_to_person <= 300:
-                        self.following = True
-                    if self.following:
+                #if not scrolling:
+                if distance_to_person <= 300:
+                    self.following = True
+                if self.following:
+                    if not scrolling:
                         if self.x < target.x:
                             self.x += self.vx
                             self.flip = True
@@ -112,8 +113,9 @@ class Character:
                             self.x -= self.vx
                             self.flip = False
                         self.walking = True
-                else: 
-                    self.x += 0
+                    else: 
+                        self.x += 0
+                        self.walking = True
 
             if self.char_type == "boss" and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
