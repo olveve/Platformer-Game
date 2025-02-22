@@ -233,11 +233,11 @@ class Character:
                 self.health = 0
                 self.alive = False
                 self.update_action(3) # Dead
-            elif self.hit:
+            elif self.hit == True:
                 self.update_action(2) # Hit
-            elif self.attacking:
+            elif self.attacking == True:
                 self.update_action(1) # Attack
-            elif self.walking:
+            elif self.walking == True:
                 self.update_action(1) # Walking
             else:
                 self.update_action(0) # Idle
@@ -284,6 +284,8 @@ class Character:
                     self.attack_cooldown = 40
                 if self.action == 2:
                     self.hit = False
+                    self.attacking = False
+                    self.attack_cooldown = 40
             
             if self.char_type == "npc":
                 self.rect.topleft = (self.x, self.y)
@@ -310,6 +312,7 @@ class Character:
                     damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
                     target.health -= damage
                     target.hit = True
+                    print(f"Hit {target.hit}")
 
                 # Sett cooldown
                 self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
@@ -409,7 +412,7 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
-    boss = Character(False, "boss", 2500, 100, 3, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
+    boss = Character(False, "boss", 200, 100, 3, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
     npc = Character(False, "npc", 100, HEIGHT-100, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
     
     enemies = []
