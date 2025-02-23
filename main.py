@@ -12,7 +12,7 @@ from character import create_characters
 
 world_length = 5 * WIDTH
 #person, enemies = create_characters(world_length)
-person, boss, npc = create_characters(world_length)
+person, boss, npc, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
 scroll_threshold = 200
