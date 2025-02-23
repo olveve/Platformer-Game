@@ -354,6 +354,8 @@ class Character:
 
         if self.char_type == "npc":
             screen.blit(img, (self.x, self.y+65))
+        elif self.char_type == "enemy":
+            screen.blit(img, (self.x, self.y+21))
         else:   
             screen.blit(img, (img_x, img_y))
         pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
