@@ -99,7 +99,7 @@ class Character:
                         self.damage = 10
                     elif keys_pressed[pg.K_p]:
                         self.attack_type = 3
-                        self.damage = 90
+                        self.damage = 30
                     if keys_pressed[pg.K_l] or keys_pressed[pg.K_k] or keys_pressed[pg.K_p]:
                         self.attack(screen, [boss] + (enemies if isinstance(enemies, list) else [enemies]))
 
@@ -325,6 +325,7 @@ class Character:
                         target.health -= self.damage
                         target.hit = True
 
+                
                 # Sett cooldown
                 self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
 
