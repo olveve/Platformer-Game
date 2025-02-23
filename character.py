@@ -315,7 +315,8 @@ class Character:
                     target.hit = True
 
                 # Sett cooldown
-                self.attack_cooldown = 150 if self.char_type == "boss" else 20
+                self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
+
                 """ attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
                 if attacking_rect.colliderect(target.rect):
                     damage = 90 if self.action == 8 else 10
