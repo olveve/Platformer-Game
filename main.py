@@ -28,6 +28,8 @@ def health_bar(health, x, y,):
 person.world_x = person.x 
 npc.world_x = npc.x 
 boss.world_x = boss.x
+boss_activated = False
+
 
 running = True
 while running:
@@ -39,6 +41,9 @@ while running:
     clock.tick(FPS)
     keys = pg.key.get_pressed()
     scrolling = ""  # for scroll retningen
+
+    if not boss_activated and person.rect.colliderect(boss.rect):
+        boss_activated = True
 
     draw_bg_base(screen, scroll)
     draw_fuji(screen, scroll)
@@ -57,8 +62,10 @@ while running:
         else:
             person.world_x = world_length - person.rect.width
 
-        """ if boss.world_x + boss.vx >= world_length - boss.rect.width:
-            boss.world_x -= boss.vx """
+        if boss.world_x + boss.vx <= world_length - boss.rect.width:
+            boss.world_x += boss.vx/3
+        else:
+            boss.world_x = world_length - boss.rect.width
 
         if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll = person.world_x - (WIDTH - scroll_threshold)
@@ -72,8 +79,10 @@ while running:
         else:
             person.world_x = world_length - person.rect.width
 
-        """ if boss.world_x + boss.vx >= world_length - boss.rect.width:
-            boss.world_x -= boss.vx """
+        if boss.world_x + boss.vx <= world_length - boss.rect.width:
+            boss.world_x += boss.vx
+        else:
+            boss.world_x = world_length - boss.rect.width
 
         if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll = person.world_x - (WIDTH - scroll_threshold)
@@ -87,6 +96,11 @@ while running:
         else:
             person.world_x = 0
 
+        if boss.world_x - boss.vx >= 0:
+            boss.world_x -= boss.vx/3
+        else:
+            boss.world_x = 0
+
         if person.world_x - scroll < scroll_threshold and scroll > 0:
             scroll = person.world_x - scroll_threshold
             bg_scroll = scroll
@@ -99,6 +113,11 @@ while running:
         else:
             person.world_x = 0
 
+        if boss.world_x - boss.vx >= 0:
+            boss.world_x -= boss.vx
+        else:
+            boss.world_x = 0
+
         if person.world_x - scroll < scroll_threshold and scroll > 0:
             scroll = person.world_x - scroll_threshold
             bg_scroll = scroll
@@ -106,7 +125,14 @@ while running:
             scrolling = True
             
     person.x = person.world_x - scroll
-    #boss.x = boss.world_x - scroll
+
+    if boss_activated:
+        if boss.world_x < person.world_x:  
+            boss.world_x += boss.vx  
+        elif boss.world_x > person.world_x:  
+            boss.world_x -= boss.vx   
+
+    boss.x = boss.world_x - scroll
 
     #if boss:
     boss_factor = boss.vx / person.vx
