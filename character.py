@@ -232,6 +232,7 @@ class Character:
             if self.health <= 0:
                 self.health = 0
                 self.alive = False
+                self.y = 287
                 self.update_action(3) # Dead
             elif self.hit == True:
                 self.update_action(2) # Hit
