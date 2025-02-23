@@ -310,7 +310,7 @@ class Character:
 
                 # Sjekk om angrepet treffer målet
                 if attacking_rect.colliderect(target.rect):
-                    damage = 10 if self.char_type == "boss" else (90 if self.action == 8 else 10)
+                    damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
                     target.health -= damage
                     target.hit = True
 
