@@ -98,8 +98,14 @@ while running:
             bg_scroll = scroll
             scrolling = "L"
             scrolling = True
+
+    if boss.world_x + boss.vx <= world_length - boss.rect.width:
+            boss.world_x += boss.vx
+    else:
+        boss.world_x = world_length - boss.rect.width
             
     person.x = person.world_x - scroll
+    boss.x = boss.world_x - scroll
 
     #if boss:
     boss_factor = boss.vx / person.vx
@@ -123,13 +129,6 @@ while running:
         enemy.movement(speed, scrolling, person, None, None, screen)
         enemy.update()
         enemy.draw(screen)
-
-    target = enemies
-    if person.rect.colliderect(boss.rect):
-        target = boss
-    elif person.rect.colliderect(enemy.rect):
-        target = enemies
-        print("treff")
 
     person.movement(scroll, scrolling, None, boss, enemies, screen)
     person.update()
