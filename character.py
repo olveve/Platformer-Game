@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet, boss_sheet, npc_sheet
+from backgrounds import samurai_sheet, boss_sheet, npc_sheet, enemy_sheet
 
 class Character:
     def __init__(self, flip, char_type, x, y, vx, data, sprite_sheet, animation_steps, world_length, health):
@@ -34,6 +34,7 @@ class Character:
         self.scaley = 25*SAMURAI_SCALE if self.char_type == "samurai" else 75*BOSS_SCALE
         self.rect = pg.Rect(x, y, self.scalex, self.scaley)
         self.world_length = world_length
+        self.damage = 10
 
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
@@ -51,12 +52,13 @@ class Character:
 
 
 
-    def movement(self, scroll, scrolling, target, screen):
+    def movement(self, scroll, scrolling, target, boss, enemies, screen):
         if self.char_type != "npc":  # Kun spilleren og fiender blir påvirket
             self.vy += GRAVITY
             self.y += self.vy
         self.running = False
         self.walking = False
+        keys_pressed = pg.key.get_pressed()
         
         if self.alive == True:
             if self.y > HEIGHT - (self.rect.height + 67):
@@ -65,7 +67,6 @@ class Character:
                 self.jumping = False
 
             if self.char_type == "samurai":
-                keys_pressed = pg.key.get_pressed()
                 #Kan bare gjøre andre ting om jeg ikke agriper
                 if self.attacking == False:
                     #movement
@@ -78,11 +79,11 @@ class Character:
                         self.running = True
                         self.flip = True
                     if keys_pressed[pg.K_d]:
-                        self.x = int(self.x - (self.vx / 3))
+                        self.x = int(self.x + (self.vx / 3))
                         self.walking = True
                         self.flip = False
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
-                        self.x = int(self.x - self.vx)
+                        self.x = int(self.x + self.vx)
                         self.running = True
                     #Hoppe
                     if keys_pressed[pg.K_w]:
@@ -90,16 +91,22 @@ class Character:
                             self.vy = -22
                             self.jumping = True
                     #angrep
+                    if keys_pressed[pg.K_l]:
+                        self.attack_type = 1
+                        self.damage = 10
+                    elif keys_pressed[pg.K_k]:
+                        self.attack_type = 2
+                        self.damage = 10
+                    elif keys_pressed[pg.K_p]:
+                        self.attack_type = 3
+                        self.damage = 30
                     if keys_pressed[pg.K_l] or keys_pressed[pg.K_k] or keys_pressed[pg.K_p]:
-                        self.attack(screen, target)
-                        if keys_pressed[pg.K_l]:
-                            self.attack_type = 1
-                        elif keys_pressed[pg.K_k]:
-                            self.attack_type = 2
-                        elif keys_pressed[pg.K_p]:
-                            self.attack_type = 3
+                        self.attack(screen, [boss] + (enemies if isinstance(enemies, list) else [enemies]))
 
-            if self.char_type == "boss":
+            if self.char_type == "boss" or self.char_type == "enemy":
+
+                """ if ((keys_pressed[pg.K_a] and keys_pressed[pg.K_LSHIFT]) or keys_pressed[pg.K_a]) and self.x >=self.world_length - self.rect.width:
+                    self.x -= self.vx """
                 distance_to_person = abs(self.x - target.x)
                 #if not scrolling:
                 if distance_to_person <= 300:
@@ -117,9 +124,13 @@ class Character:
                         self.x += 0
                         self.walking = True
 
-            if self.char_type == "boss" and self.alive and self.attack_cooldown == 0:
+            if (self.char_type == "boss" or self.char_type == "enemy") and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
-                if distance_to_target < 100: # Bossen angriper bare når spilleren er nærme
+                if distance_to_target < 100: # Bossen og enemies angriper bare når spilleren er nærme
+                    if self.char_type == "enemy":
+                        self.damage = 5
+                    elif self.char_type == "boss":
+                        self.damage = 10
                     self.attack(screen, target)
                 """""
                 else:
@@ -134,7 +145,7 @@ class Character:
                     self.x = 0
                 if self.x > self.world_length - self.rect.width:
                     self.x = self.world_length - self.rect.width
-                    
+                            
             if self.char_type == "npc":
                 return
 
@@ -227,6 +238,21 @@ class Character:
                 self.update_action(1) # Walking
             else:
                 self.update_action(0) # Idle
+                
+        if self.char_type == "enemy":
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.y = 287
+                self.update_action(3) # Dead
+            elif self.hit == True:
+                self.update_action(2) # Hit
+            elif self.attacking == True:
+                self.update_action(1) # Attack
+            elif self.walking == True:
+                self.update_action(1) # Walking
+            else:
+                self.update_action(0) # Idle
 
 
         animation_cooldown = 100
@@ -264,11 +290,22 @@ class Character:
                     self.hit = False
                     self.attacking = False
                     self.attack_cooldown = 150
+                    
+            if self.char_type == "enemy":
+                if self.action == 1:
+                    self.attacking = False
+                    self.attack_cooldown = 40
+                if self.action == 2:
+                    self.hit = False
+                    self.attacking = False
+                    self.attack_cooldown = 40
             
             if self.char_type == "npc":
                 self.rect.topleft = (self.x, self.y)
 
-    def attack(self, screen, target):
+    def attack(self, screen, targets):
+            if not isinstance(targets, list):
+                targets = [targets]
         #if self.char_type == "samurai":
             if self.attack_cooldown == 0:
                 """ if self.action == 8 and self.attack3_cooldown > 0:
@@ -278,36 +315,23 @@ class Character:
                 if self.char_type == "samurai":
                     # Samurai ser mot høyre fra start
                     attack_x = self.rect.right if not self.flip else self.rect.left - attack_width
-                elif self.char_type == "boss":
+                elif self.char_type == "boss" or self.char_type == "enemy":
                     # Boss ser mot venstre fra start
                     attack_x = self.rect.left - attack_width if not self.flip else self.rect.right
 
                 # Opprett angrepsrektangelet
                 attacking_rect = pg.Rect(attack_x, self.rect.y, attack_width, self.rect.height)
 
-                # Sjekk om angrepet treffer målet
-                if attacking_rect.colliderect(target.rect):
-                    damage = 10 if self.char_type == "boss" else (90 if self.action == 8 else 10)
-                    target.health -= damage
-                    target.hit = True
+                for target in targets:
+                    if attacking_rect.colliderect(target.rect):
+                        #damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
+                        target.health -= self.damage
+                        target.hit = True
 
+                
                 # Sett cooldown
-                self.attack_cooldown = 150 if self.char_type == "boss" else 20
-                """ attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, 2*self.rect.width, self.rect.height)
-                if attacking_rect.colliderect(target.rect):
-                    damage = 90 if self.action == 8 else 10
-                    target.health -= damage
-                    target.hit = True 
-                pg.draw.rect(screen, (0, 255, 0), attacking_rect)
-        if self.char_type == "boss":
-            if self.attack_cooldown == 0:
-                self.attacking = True
-                attacking_rect = pg.Rect(self.rect.centerx - (2*self.rect.width * self.flip), self.rect.y, -(2*self.rect.width), self.rect.height)
-                if attacking_rect.colliderect(target.rect):
-                    damage = 10
-                    target.health -= damage
-                    target.hit = True """
-                pg.draw.rect(screen, (0, 255, 0), attacking_rect)
+                self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
+                #pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
 
     def update_action(self, new_action):
@@ -330,9 +354,11 @@ class Character:
 
         if self.char_type == "npc":
             screen.blit(img, (self.x, self.y+65))
+        elif self.char_type == "enemy":
+            screen.blit(img, (self.x, self.y+21))
         else:   
             screen.blit(img, (img_x, img_y))
-        pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
+        #pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
 
                 
@@ -387,9 +413,15 @@ class Enemy(Character):
 
 def create_characters(world_length):
     person = Character(False, "samurai", 100, 100, 7, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, world_length, 100)
-    boss = Character(False, "boss", 600, 100, 3, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
+    boss = Character(False, "boss", 3000, 100, 3, BOSS_DATA, boss_sheet, BOSS_ANIMATION_STEPS, world_length, 100)
     npc = Character(False, "npc", 100, HEIGHT-100, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
-    return person, boss, npc
+    
+    enemies = []
+    for i in range(1, 3):
+        enemy = Character(False, "enemy", 500 * i, HEIGHT-100, 2, ENEMY_DATA, enemy_sheet, ENEMY_ANIMATION_STEPS, world_length, 20)
+        enemies.append(enemy)
+        
+    return person, boss, npc, enemies
 
     """""
     enemies = []
