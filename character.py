@@ -278,6 +278,15 @@ class Character:
                     self.hit = False
                     self.attacking = False
                     self.attack_cooldown = 150
+                    
+            if self.char_type == "enemy":
+                if self.action == 1:
+                    self.attacking = False
+                    self.attack_cooldown = 40
+                if self.action == 2:
+                    self.hit = False
+                    self.attacking = False
+                    self.attack_cooldown = 40
             
             if self.char_type == "npc":
                 self.rect.topleft = (self.x, self.y)
@@ -292,7 +301,7 @@ class Character:
                 if self.char_type == "samurai":
                     # Samurai ser mot høyre fra start
                     attack_x = self.rect.right if not self.flip else self.rect.left - attack_width
-                elif self.char_type == "boss":
+                elif self.char_type == "boss" or self.char_type == "enemy":
                     # Boss ser mot venstre fra start
                     attack_x = self.rect.left - attack_width if not self.flip else self.rect.right
 
