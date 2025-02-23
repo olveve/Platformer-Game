@@ -227,6 +227,20 @@ class Character:
                 self.update_action(1) # Walking
             else:
                 self.update_action(0) # Idle
+                
+        if self.char_type == "enemy":
+            if self.health <= 0:
+                self.health = 0
+                self.alive = False
+                self.update_action(3) # Dead
+            elif self.hit == True:
+                self.update_action(2) # Hit
+            elif self.attacking == True:
+                self.update_action(1) # Attack
+            elif self.walking == True:
+                self.update_action(1) # Walking
+            else:
+                self.update_action(0) # Idle
 
 
         animation_cooldown = 100
