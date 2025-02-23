@@ -27,6 +27,7 @@ def health_bar(health, x, y,):
 # Reell posisjon i verden
 person.world_x = person.x 
 npc.world_x = npc.x 
+boss.world_x = boss.x
 
 running = True
 while running:
@@ -46,7 +47,7 @@ while running:
     health_bar(person.health, 20, 20)
     health_bar(boss.health, 630, 20)
     
-    if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
+    if abs(person.world_x - npc.world_x) < 100:
         screen.blit(rules_img, rules_rect)
 
 
@@ -97,7 +98,7 @@ while running:
             bg_scroll = scroll
             scrolling = "L"
             scrolling = True
-
+            
     person.x = person.world_x - scroll
 
     #if boss:
