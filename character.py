@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from assets import *
-from backgrounds import samurai_sheet, boss_sheet, npc_sheet
+from backgrounds import samurai_sheet, boss_sheet, npc_sheet, enemy_sheet
 
 class Character:
     def __init__(self, flip, char_type, x, y, vx, data, sprite_sheet, animation_steps, world_length, health):
