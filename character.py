@@ -51,7 +51,7 @@ class Character:
 
 
 
-    def movement(self, scroll, scrolling, target, screen):
+    def movement(self, scroll, scrolling, target, boss, enemies, screen):
         if self.char_type != "npc":  # Kun spilleren og fiender blir påvirket
             self.vy += GRAVITY
             self.y += self.vy
@@ -78,11 +78,11 @@ class Character:
                         self.running = True
                         self.flip = True
                     if keys_pressed[pg.K_d]:
-                        self.x = int(self.x - (self.vx / 3))
+                        self.x = int(self.x + (self.vx / 3))
                         self.walking = True
                         self.flip = False
                     if keys_pressed[pg.K_d] and keys_pressed[pg.K_LSHIFT]:
-                        self.x = int(self.x - self.vx)
+                        self.x = int(self.x + self.vx)
                         self.running = True
                     #Hoppe
                     if keys_pressed[pg.K_w]:
@@ -91,7 +91,7 @@ class Character:
                             self.jumping = True
                     #angrep
                     if keys_pressed[pg.K_l] or keys_pressed[pg.K_k] or keys_pressed[pg.K_p]:
-                        self.attack(screen, target)
+                        self.attack(screen, [boss] + (enemies if isinstance(enemies, list) else [enemies]))
                         if keys_pressed[pg.K_l]:
                             self.attack_type = 1
                         elif keys_pressed[pg.K_k]:
@@ -291,7 +291,9 @@ class Character:
             if self.char_type == "npc":
                 self.rect.topleft = (self.x, self.y)
 
-    def attack(self, screen, target):
+    def attack(self, screen, targets):
+            if not isinstance(targets, list):
+                targets = [targets]
         #if self.char_type == "samurai":
             if self.attack_cooldown == 0:
                 """ if self.action == 8 and self.attack3_cooldown > 0:
@@ -308,11 +310,11 @@ class Character:
                 # Opprett angrepsrektangelet
                 attacking_rect = pg.Rect(attack_x, self.rect.y, attack_width, self.rect.height)
 
-                # Sjekk om angrepet treffer målet
-                if attacking_rect.colliderect(target.rect):
-                    damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
-                    target.health -= damage
-                    target.hit = True
+                for target in targets:
+                    if attacking_rect.colliderect(target.rect):
+                        damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
+                        target.health -= damage
+                        target.hit = True
 
                 # Sett cooldown
                 self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
