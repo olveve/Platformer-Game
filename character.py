@@ -91,7 +91,7 @@ class Character:
                             self.jumping = True
                     #angrep
                     if keys_pressed[pg.K_l] or keys_pressed[pg.K_k] or keys_pressed[pg.K_p]:
-                        self.attack(screen, [target])
+                        self.attack(screen, target)
                         if keys_pressed[pg.K_l]:
                             self.attack_type = 1
                         elif keys_pressed[pg.K_k]:
@@ -119,7 +119,7 @@ class Character:
             if (self.char_type == "boss" or self.char_type == "enemy") and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
                 if distance_to_target < 100: # Bossen angriper bare når spilleren er nærme
-                    self.attack(screen, [target])
+                    self.attack(screen, target)
                     
                 """""
                 else:
@@ -290,7 +290,7 @@ class Character:
             if self.char_type == "npc":
                 self.rect.topleft = (self.x, self.y)
 
-    def attack(self, screen, targets):
+    def attack(self, screen, target):
         if self.attack_cooldown == 0:
             self.attacking = True
             attack_width = self.rect.width  # Angrepsområdet
@@ -303,17 +303,21 @@ class Character:
 
             # Opprett angrepsrektangelet
             attacking_rect = pg.Rect(attack_x, self.rect.y, attack_width, self.rect.height)
-            print("Targets:", targets)
 
             # Sjekk om angrepet treffer målet
-            for target in targets:
-                print("Target:", target)  # Debugging
-
-                if attacking_rect.colliderect(target.rect):
-                    damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
-                    target.health -= damage
-                    target.hit = True  # Sett hit-attributtet til fienden
-                    print(f"Hit detected! Target health: {target.health}")
+            if target is not None:  # Sjekk at target er gyldig
+                if isinstance(target, Boss):  # Hvis target er bossen
+                    if attacking_rect.colliderect(target.rect):  # Hvis det er kollisjon med bossen
+                        # Gjør skade på bossen
+                        target.take_damage(self.attack_damage * 2)  # Eksempel på større skade på boss
+                        print("Attack hit the boss!")
+                elif isinstance(target, Enemy):  # Hvis target er en fiende
+                    if attacking_rect.colliderect(target.rect):  # Hvis det er kollisjon med fienden
+                        # Gjør skade på fienden
+                        target.take_damage(self.attack_damage)
+                        print("Attack hit the enemy!")
+                else:
+                    print("No valid target!")
 
             # Sett cooldown
             self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
