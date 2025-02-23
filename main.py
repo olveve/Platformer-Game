@@ -108,9 +108,8 @@ while running:
         speed = person.vx * boss_factor
         boss.flip = False
 
-
-    
-    person.movement(scroll, scrolling, boss, screen)
+    targets = [boss] + enemies
+    person.movement(scroll, scrolling, targets, screen)
     person.update()
     person.draw(screen)
     npc.movement(scroll, scrolling, person, screen)  # Bevegelseslogikk
@@ -122,7 +121,7 @@ while running:
     boss.draw(screen)
     
     for enemy in enemies:
-        enemy.movement(scrolling, speed, person, screen)
+        enemy.movement(scroll, scrolling, person, screen)
         enemy.update()
         enemy.draw(screen)
         
