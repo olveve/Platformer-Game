@@ -118,7 +118,7 @@ class Character:
                             self.flip = False
                         self.walking = True
                     else: 
-                        self.x += 0
+                        self.x += scroll
                         self.walking = True
 
             if (self.char_type == "boss" or self.char_type == "enemy") and self.alive and self.attack_cooldown == 0:

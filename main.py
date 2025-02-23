@@ -105,7 +105,7 @@ while running:
     """ else:
         boss_factor = 1
  """
-    speed = -person.vx
+    speed = 0
     if scrolling == "R":
         speed = -person.vx * boss_factor
         boss.flip = True
