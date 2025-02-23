@@ -417,7 +417,7 @@ def create_characters(world_length):
     npc = Character(False, "npc", 100, HEIGHT-100, 0, NPC_DATA, npc_sheet, NPC_ANIMATION_STEPS, world_length, 100)
     
     enemies = []
-    for i in range(1, 5):
+    for i in range(1, 3):
         enemy = Character(False, "enemy", 500 * i, HEIGHT-100, 2, ENEMY_DATA, enemy_sheet, ENEMY_ANIMATION_STEPS, world_length, 20)
         enemies.append(enemy)
         
