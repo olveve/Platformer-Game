@@ -56,11 +56,9 @@ while running:
             person.world_x += person.vx/3
         else:
             person.world_x = world_length - person.rect.width
-            
-        if boss.world_x + boss.vx <= world_length - boss.rect.width:
-            boss.world_x += boss.vx
-        else:
-            boss.world_x = world_length - boss.rect.width
+
+        """ if boss.world_x + boss.vx >= world_length - boss.rect.width:
+            boss.world_x -= boss.vx """
 
         if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll = person.world_x - (WIDTH - scroll_threshold)
@@ -74,10 +72,8 @@ while running:
         else:
             person.world_x = world_length - person.rect.width
 
-        if boss.world_x + boss.vx <= world_length - boss.rect.width:
-            boss.world_x += boss.vx
-        else:
-            boss.world_x = world_length - boss.rect.width
+        """ if boss.world_x + boss.vx >= world_length - boss.rect.width:
+            boss.world_x -= boss.vx """
 
         if person.world_x - scroll > WIDTH - scroll_threshold and scroll < world_length - WIDTH:
             scroll = person.world_x - (WIDTH - scroll_threshold)
@@ -110,7 +106,7 @@ while running:
             scrolling = True
             
     person.x = person.world_x - scroll
-    boss.x = boss.world_x - scroll
+    #boss.x = boss.world_x - scroll
 
     #if boss:
     boss_factor = boss.vx / person.vx
