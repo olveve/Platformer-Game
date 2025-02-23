@@ -99,7 +99,7 @@ class Character:
                         elif keys_pressed[pg.K_p]:
                             self.attack_type = 3
 
-            if self.char_type == "boss":
+            if self.char_type == "boss" or self.char_type == "enemy":
                 distance_to_person = abs(self.x - target.x)
                 #if not scrolling:
                 if distance_to_person <= 300:
@@ -117,7 +117,7 @@ class Character:
                         self.x += 0
                         self.walking = True
 
-            if self.char_type == "boss" and self.alive and self.attack_cooldown == 0:
+            if (self.char_type == "boss" or self.char_type == "enemy") and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
                 if distance_to_target < 100: # Bossen angriper bare når spilleren er nærme
                     self.attack(screen, target)

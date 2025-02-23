@@ -54,6 +54,11 @@ while running:
     npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
     npc.draw(screen)  # Tegn NPC-en på riktig sted
     
+    for enemy in enemies:
+        enemy.movement(scroll, scrolling, person, screen)
+        enemy.update()
+        enemy.draw(screen)
+    
     if abs(person.world_x - npc.world_x) < 100:  # Juster avstanden etter behov
         screen.blit(rules_img, rules_rect)
 
