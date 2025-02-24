@@ -146,14 +146,14 @@ while running:
 
     if not boss.alive:
         boss_activated = False
-        boss.x = boss.death_x - scroll  # Holder bossen fast der den døde
+        boss.x = boss.death_x - scroll
     boss.movement(speed, scrolling, person, None, None, screen)
     boss.update()
     boss.draw(screen)
 
     for enemy in enemies:
         if not enemy.alive:
-            enemy.x = enemy.death_x - scroll  # Holder fienden fast der den døde
+            enemy.x = enemy.death_x - scroll
         enemy.movement(speed, scrolling, person, None, None, screen)
         enemy.update()
         enemy.draw(screen)
