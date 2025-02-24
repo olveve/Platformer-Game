@@ -126,19 +126,12 @@ class Character:
 
             if (self.char_type == "boss" or self.char_type == "enemy") and self.alive and self.attack_cooldown == 0:
                 distance_to_target = abs(self.x - target.x)
-                if distance_to_target < 100: # Bossen og enemies angriper bare når spilleren er nærme
+                if distance_to_target < 100:
                     if self.char_type == "enemy":
                         self.damage = 5
                     elif self.char_type == "boss":
                         self.damage = 10
                     self.attack(screen, target)
-                """""
-                else:
-                    try:
-                        self.x += int(scroll) # Adjust enemy position based on scroll
-                    except ValueError:
-                        pass
-                """
 
                 # Ensure the enemy doesn't move beyond the world boundaries
                 if self.x < 0:
@@ -159,42 +152,6 @@ class Character:
         if self.attack3_cooldown > 0:
             self.attack3_cooldown -= 1
 
-            
-        """""
-        if self.char_type == "enemy":
-            distance_to_person = abs(self.x - target.x)
-
-            if self.y > HEIGHT - (self.rect.height + 67):
-                self.y = HEIGHT - (self.rect.height + 67)
-                self.vy = 0
-
-            if not scrolling:
-                if distance_to_person <= 300:
-                    self.following = True
-                if self.following:
-                    if self.x < target.x:
-                        self.x += self.vx
-                    if self.x > target.x:
-                        self.x -= self.vx
-        
-
-            #elif scrolling and distance_to_person <= WIDTH:
-            #   self.vx = 0
-            else:
-                try:
-                    self.x += int(scroll) # Adjust enemy position based on scroll
-                except ValueError:
-                    pass
-
-            # Ensure the enemy doesn't move beyond the world boundaries
-            if self.x < 0:
-                self.x = 0
-            if self.x > self.world_length - self.rect.width:
-                self.x = self.world_length - self.rect.width
-
-            # Oppdatere rektangelet basert på fiendens posisjon
-            self.rect.topleft = (self.x, self.y)
-            """
 
     def update(self):
         if self.attack_cooldown > 0:
@@ -256,9 +213,8 @@ class Character:
 
 
         animation_cooldown = 100
-        # oppdaterer bildet
         self.image = self.animation_list[self.action][self.frame_index]
-        # sjekker im nok tid har gått siden siste oppdatering
+        # sjekker om nok tid har gått siden siste oppdatering
         if pg.time.get_ticks() - self.update_time > animation_cooldown:
             self.frame_index += 1 
             self.update_time = pg.time.get_ticks()
@@ -306,12 +262,9 @@ class Character:
     def attack(self, screen, targets):
             if not isinstance(targets, list):
                 targets = [targets]
-        #if self.char_type == "samurai":
             if self.attack_cooldown == 0:
-                """ if self.action == 8 and self.attack3_cooldown > 0:
-                    return  # Avbryt angrepet hvis attack3_cooldown ikke er null """
                 self.attacking = True
-                attack_width = self.rect.width  # Angrepsområdet
+                attack_width = self.rect.width
                 if self.char_type == "samurai":
                     # Samurai ser mot høyre fra start
                     attack_x = self.rect.right if not self.flip else self.rect.left - attack_width
@@ -319,19 +272,14 @@ class Character:
                     # Boss ser mot venstre fra start
                     attack_x = self.rect.left - attack_width if not self.flip else self.rect.right
 
-                # Opprett angrepsrektangelet
                 attacking_rect = pg.Rect(attack_x, self.rect.y, attack_width, self.rect.height)
 
                 for target in targets:
                     if attacking_rect.colliderect(target.rect):
-                        #damage = 10 if self.char_type == "boss" else (5 if self.char_type == "enemy" else (90 if self.action == 8 else 10))
                         target.health -= self.damage
                         target.hit = True
 
-                
-                # Sett cooldown
                 self.attack_cooldown = 150 if self.char_type == "boss" else (40 if self.char_type == "enemy" else 20)
-                #pg.draw.rect(screen, (0, 255, 0), attacking_rect)
 
 
     def update_action(self, new_action):
@@ -358,57 +306,6 @@ class Character:
             screen.blit(img, (self.x, self.y+21))
         else:   
             screen.blit(img, (img_x, img_y))
-        #pg.draw.rect(screen, (255, 0, 0), self.rect, 1)
-
-
-                
-
-"""""
-class Enemy(Character):
-    def __init__(self, x, y, vx, target, world_length):
-        super().__init__(x, y, vx, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS)
-        self.target = target
-        self.world_length = world_length
-        # TODO: Set self.image to the image of the enemy
-
-    def draw(self, screen):
-        super().draw(screen)
-
-    def load_images(self, sprite_sheet, animation_steps):
-        return super().load_images(sprite_sheet, animation_steps)
-
-    def movement(self, scrolling, scroll):
-        self.vy += GRAVITY
-        self.y += self.vy
-        distance_to_person = abs(self.x - self.target.x)
-
-        if self.y > HEIGHT - (self.rect.height + 67):
-            self.y = HEIGHT - (self.rect.height + 67)
-            self.vy = 0
-
-        if not scrolling:
-            if distance_to_person <= 300:
-                self.following = True
-            if self.following:
-                if self.x < self.target.x:
-                    self.x += self.vx
-                if self.x > self.target.x:
-                    self.x -= self.vx
-
-        #elif scrolling and distance_to_person <= WIDTH:
-         #   self.vx = 0
-        else:
-            self.x += scroll  # Adjust enemy position based on scroll
-
-        # Ensure the enemy doesn't move beyond the world boundaries
-        if self.x < 0:
-            self.x = 0
-        if self.x > self.world_length - self.rect.width:
-            self.x = self.world_length - self.rect.width
-
-        # Oppdatere rektangelet basert på fiendens posisjon
-        self.rect.topleft = (self.x, self.y)
-"""""
 
 
 def create_characters(world_length):
@@ -422,13 +319,3 @@ def create_characters(world_length):
         enemies.append(enemy)
         
     return person, boss, npc, enemies
-
-    """""
-    enemies = []
-    for i in range(5):
-        enemy = Character(500 * i + 800, 100, 2, False, SAMURAI_DATA, samurai_sheet, SAMURAI_ANIMATION_STEPS, "enemy", world_length)
-        enemies.append(enemy)
-    return person, enemies
-    """
-
-#person, world_length

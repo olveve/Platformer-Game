@@ -11,7 +11,6 @@ from character import create_characters
 
 
 world_length = 5 * WIDTH
-#person, enemies = create_characters(world_length)
 person, boss, npc, enemies = create_characters(world_length)
 scroll = 0
 bg_scroll = 0
@@ -40,7 +39,7 @@ while running:
 
     clock.tick(FPS)
     keys = pg.key.get_pressed()
-    scrolling = ""  # for scroll retningen
+    scrolling = ""
 
     if not boss_activated and person.rect.colliderect(boss.rect):
         boss_activated = True
@@ -136,9 +135,6 @@ while running:
 
     #if boss:
     boss_factor = boss.vx / person.vx
-    """ else:
-        boss_factor = 1
- """
     speed = 0
     if scrolling == "R":
         speed = -person.vx * boss_factor
@@ -160,28 +156,10 @@ while running:
     person.movement(scroll, scrolling, None, boss, enemies, screen)
     person.update()
     person.draw(screen)
-    npc.movement(scroll, scrolling, None, None, None, screen)  # Bevegelseslogikk
+    npc.movement(scroll, scrolling, None, None, None, screen)
     npc.update()  
-    npc.x = npc.world_x - scroll  # Juster NPCs skjermposisjon basert på scroll
-    npc.draw(screen)  # Tegn NPC-en på riktig sted
-
-    """""
-    if enemies:
-        enemy_factor = enemies[0].vx / person.vx
-    else:
-        enemy_factor = 1
-
-    speed = -person.vx
-    if scrolling == "R":
-        speed = -person.vx * enemy_factor
-    elif scrolling == "L":
-        speed = person.vx * enemy_factor
-
-    for enemy in enemies:
-        enemy.movement(scrolling, speed, person, screen)
-        enemy.draw(screen)
-        enemy.update()
-    """
+    npc.x = npc.world_x - scroll
+    npc.draw(screen)  
     pg.display.update()
 
 pg.quit()
