@@ -35,6 +35,7 @@ class Character:
         self.rect = pg.Rect(x, y, self.scalex, self.scaley)
         self.world_length = world_length
         self.damage = 10
+        self.death_x = None
 
     def load_images(self, sprite_sheet, animation_steps):
         #henter ut bilder fra spritesheet
@@ -186,6 +187,8 @@ class Character:
             if self.health <= 0:
                 self.health = 0
                 self.alive = False
+                if self.death_x is None:
+                    self.death_x = self.x
                 self.update_action(4) # Dead
             elif self.hit == True:
                 self.update_action(3) # Hit
@@ -201,6 +204,8 @@ class Character:
                 self.health = 0
                 self.alive = False
                 self.y = 287
+                if self.death_x is None:
+                    self.death_x = self.x
                 self.update_action(3) # Dead
             elif self.hit == True:
                 self.update_action(2) # Hit

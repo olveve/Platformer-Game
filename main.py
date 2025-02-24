@@ -25,7 +25,7 @@ def health_bar(health, x, y,):
 
 # Reell posisjon i verden
 person.world_x = person.x 
-npc.world_x = npc.x 
+npc.world_x = npc.x
 boss.world_x = boss.x
 boss_activated = False
 
@@ -130,7 +130,7 @@ while running:
             boss.world_x += boss.vx  
         elif boss.world_x > person.world_x:  
             boss.world_x -= boss.vx   
-
+    
     boss.x = boss.world_x - scroll
 
     #if boss:
@@ -144,11 +144,16 @@ while running:
         boss.flip = False
 
 
+    if not boss.alive:
+        boss_activated = False
+        boss.x = boss.death_x - scroll  # Holder bossen fast der den døde
     boss.movement(speed, scrolling, person, None, None, screen)
     boss.update()
     boss.draw(screen)
 
     for enemy in enemies:
+        if not enemy.alive:
+            enemy.x = enemy.death_x - scroll  # Holder fienden fast der den døde
         enemy.movement(speed, scrolling, person, None, None, screen)
         enemy.update()
         enemy.draw(screen)
